@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>reg</title>
+</head>
+
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <!--  registration field  -->
+        {% for field in registration_form %}
+        {{ field }}
+        {% endfor %}
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</body>
+
+</html>

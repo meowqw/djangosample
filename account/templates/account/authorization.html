@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>auth</title>
+</head>
+
+<body>
+    <form method="post">
+        {% csrf_token %}
+          <!--  auth field  -->
+          {% for field in login_form %}
+         {{field}}
+        {% endfor %}
+        <button>Войти</button>
+      </form>
+</body>
+
+</html>
