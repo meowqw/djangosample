@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="sidebar" data-sidebar>
+  <ul class="list-reset sidebar__list accordion">
+
+    {% for category in categories %}
+    <li class="sidebar__item accordion-item accordion-item--{{category.color}}">
+      <button category="{{category.id}}"
+        class="btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--{{category.color}}">{{category.name}}</button>
+      <div class="sidebar__panel">
+        <ul class="list-reset sidebar__sublist">
+          {% for main_product in category.id_main_product.all %}
+
+
+          <li class="sidebar__subitem">
+
+            <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" color="{{category.color}}" type="mainProduct"
+              id="{{main_product.id}}" class="btn-reset sidebar__btn sidebar__btn--sub">{{main_product.name}}
+            </button>
+          </li>
+
+
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

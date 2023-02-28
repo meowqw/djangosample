@@ -1,0 +1,286 @@
+{% load static %}
+
+<main class="main" id="screenAccountMain" style="display:none">
+  <div class="account__container container">
+    <h1 class="account__title">Мой аккаунт</h1>
+    <div class="account__content">
+      <div class="tabs account-tabs" data-tabs="tab">
+        <!-- добавлены <span></span> в кнопки -->
+        <ul class="tabs__nav account-tabs__nav">
+          <li class="tabs__nav-item account-tabs__nav-item">
+            <button class="btn-reset tabs__nav-btn account-tabs__nav-btn account-tabs__nav-btn--account"
+              type="button"><span></span>Аккаунт</button>
+          </li>
+          <li class="tabs__nav-item account-tabs__nav-item">
+            <button class="btn-reset tabs__nav-btn account-tabs__nav-btn account-tabs__nav-btn--orders"
+              type="button"><span></span>Мои заказы</button>
+          </li>
+          <li class="tabs__nav-item account-tabs__nav-item">
+            <button class="btn-reset tabs__nav-btn account-tabs__nav-btn account-tabs__nav-btn--address"
+              type="button"><span></span>Мои адреса</button>
+          </li>
+        </ul>
+        <div class="tabs__content account-tabs__content">
+          <div class="tabs__panel account-tabs__panel">
+            <section class="my-data">
+              <div class="my-data__body tabs-section-body">
+                <h2 class="visually-hidden my-data__title">Аккаунт</h2>
+                <ul class="list-reset my-data__list">
+                  <li class="my-data__item">
+                    {{account.name}}
+                  </li>
+                  <li class="my-data__item">
+                    <span>Номер телефона</span>
+                    {{account.phone}}
+                  </li>
+                  <li class="my-data__item">
+                    <span>Электронная почта</span>
+                    {{account.email}}
+                  </li>
+                  <li class="my-data__item">
+                    <span>Мои контрагенты</span>
+                  {{account.agents}}
+                  </li>
+                </ul>
+                <div class="my-data__bottom">
+                  <button class="btn-reset btn-red btn-red--exit">Выйти из аккаунта</button>
+                </div>
+              </div>
+              <div class="tabs-section-footer">
+                <div class="tabs-section-footer__info">
+                  Для изменений данных вашего аккаунта обратитесь к менеджеру
+                </div>
+                <div class="tabs-section-footer__connection">
+                  Александр Иванов / +7921 123 45 67 / а.tobacco@info.ru
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="tabs__panel account-tabs__panel">
+            <section class="my-orders">
+              <h2 class="visually-hidden">Аккаунт</h2>
+              <div class="my-orders__body tabs-section-body">
+                <div class="my-orders__filtr account-filtr">
+                  <h3 class="my-orders__subtitle account-filtr__title">Фильтр</h3>
+                  <div class="account-filtr__item account-filtr__calendar calendar">
+                    <input type="text" id="input" class="calendar__input datepicker-here calendar"
+                      placeholder="Календарь" data-position="right top">
+                    <img loading="lazy" src="/static/main/img/calendar.svg" class="calendar__icon" width="22" height="22"
+                      alt="calendar">
+                    <!-- кнопка close -->
+                    <img loading="lazy" src="/static/main/img/close-black.svg" class="calendar__icon calendar__icon--close"
+                      width="22" height="22" alt="calendar">
+                  </div>
+                  <div class="account-filtr__item account-filtr__item--type filtr__dropdown">
+                    <span class="notice">3</span>
+                    <div class="custom-select">
+                      <select>
+                        <option value="0">Марракеш Ясень</option>
+                        <option value="1">Марракеш Шиша</option>
+                        <option value="2">Марракеш 2</option>
+                        <option value="3">Марракеш 3</option>
+                        <option value="4">Марракеш 4</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="account-filtr__item account-filtr__item--payment filtr__dropdown">
+                    <div class="custom-select">
+                      <select>
+                        <option value="0">Оплата</option>
+                        <option value="1">Оплата</option>
+                        <option value="2">Оплата</option>
+                        <option value="3">Оплата</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <table class="my-orders__table table">
+                  <thead class="table__thead">
+                    <tr class="table__tr">
+                      <th class="table__th">Номер заказа</th>
+                      <th class="table__th">Дата заказа</th>
+                      <th class="table__th">Точка заказа</th>
+                      <th class="table__th">Сумма заказа</th>
+                      <th class="table__th">Статус оплаты</th>
+                      <th class="table__th">Статус заказа</th>
+                      <th class="table__th"></th>
+                    </tr>
+                  </thead>
+                  <tbody class="table__tbody">
+                    <!-- item -->
+                    <tr class="table__tr">
+                      <td class="table__td">
+                        <div class="my-orders__number">G11-3NSTBM</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__data">
+                          17.08.2022
+                          <span>12:57:28</span>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__point">Марракеш Ясень</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__sum">29 200 ₽</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__pay-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--red">Не оплачен</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__order-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--pink">В обработке</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__hide">
+                          <!-- добавлен data атрибут для открытия попапа -->
+                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- item -->
+                    <tr class="table__tr">
+                      <td class="table__td">
+                        <div class="my-orders__number">G11-3NSTBM</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__data">
+                          17.08.2022
+                          <span>12:57:28</span>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__point">Марракеш Ясень</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__sum">29 200 ₽</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__pay-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--green">Оплачен</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__order-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--blue">В процессе отгрузки</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__hide">
+                          <!-- добавлен data атрибут для открытия попапа -->
+                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- item -->
+                    <tr class="table__tr">
+                      <td class="table__td">
+                        <div class="my-orders__number">G11-3NSTBM</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__data">
+                          17.08.2022
+                          <span>12:57:28</span>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__point">Марракеш Ясень</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__sum">29 200 ₽</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__pay-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--green">Оплачен</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__order-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--gray">Доставлен</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__hide">
+                          <!-- добавлен data атрибут для открытия попапа -->
+                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- item -->
+                    <tr class="table__tr">
+                      <td class="table__td">
+                        <div class="my-orders__number">G11-3NSTBM</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__data">
+                          17.08.2022
+                          <span>12:57:28</span>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__point">Марракеш Ясень</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__sum">29 200 ₽</div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__pay-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--orange">Частично</button>
+                          <span>Задолжность 29 200 ₽</span>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__order-state">
+                          <button class="btn-reset my-orders__btn my-orders__btn--gray">Доставлен</button>
+                        </div>
+                      </td>
+                      <td class="table__td">
+                        <div class="my-orders__hide">
+                          <!-- добавлен data атрибут для открытия попапа -->
+                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="my-orders__footer">
+                <div class="my-orders__footer-content">Общая задолжность: 29 200 ₽</div>
+              </div>
+            </section>
+          </div>
+          <div class="tabs__panel account-tabs__panel">
+            <section class="my-addresses">
+              <div class="my-addresses__body tabs-section-body">
+                <h2 class="visually-hidden">Мои адресса</h2>
+                <ul class="list-reset my-addresses__list">
+                  <li class="my-addresses__item">
+                    <span>Косарево 7 </span>
+                    /  153025, Россия, Иваново  / 
+                    <span> Марракеш Ясень</span>
+                  </li>
+                  <li class="my-addresses__item">
+                    <span>Якова Гарелина 2А </span>
+                    /  145010, Россия, Иваново  / 
+                    <span> Марракеш Ясень</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="tabs-section-footer">
+                <div class="tabs-section-footer__info">
+                  Для изменений данных вашего аккаунта обратитесь к менеджеру
+                </div>
+                <div class="tabs-section-footer__connection">
+                  Александр Иванов / +7921 123 45 67 / а.tobacco@info.ru
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

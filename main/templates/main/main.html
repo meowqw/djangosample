@@ -1,0 +1,389 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+<body class="page__body">
+  <div class="site-container site-container--100vh" id="app">
+    
+    <header class="header">
+      <div class="container header__container">
+        <div class="header__left">
+          <div class="header__logo" v-on:click="switchScreen('screenBanners')">
+            <img loading="lazy" src="{% static 'main/img/tobacco.svg' %}" class="image" width="156" height="22" alt="Tobacco">
+          </div>
+          <button class="btn-reset btn header__btn" data-graph-path="menu" v-on:click="switchScreenMain('screenCatalogMain')" data-btn-open>
+            <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28" alt="path">
+            <span>Каталог</span>
+          </button>
+          <button class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close >
+            <img loading="lazy" src="{% static 'main/img/close.svg' %}" class="image" width="28" height="28" alt="path">
+            <span>Каталог</span>
+          </button>
+          <button class="btn-reset btn btn--gray header__user" v-on:click="switchScreenMain('screenAccountMain')"></button>
+        </div>
+        <div class="header__right" v-if="currentScreenMain != 'screenBasketMain'">
+          <button class="btn-reset btn header__btn header__btn--sidebar" data-sidebar-btn>
+          </button>
+          <ul class="list-reset header__list">
+            <li class="header__item">
+              <div class="header__icon">
+                <img loading="lazy" src="{% static 'main/img/path-green.svg' %}" class="image" width="22" height="22" alt="path">
+              </div>
+              <div class="header__info">
+                <div class="header__crit">В наличии</div>
+                <div class="header__value">{* total.stock *} ₽</div>
+              </div>
+            </li>
+            <li class="header__item">
+              <div class="header__icon">
+                <img loading="lazy" src="{% static 'main/img/path-orange.svg' %}" class="image" width="22" height="22" alt="path">
+              </div>
+              <div class="header__info">
+                <div class="header__crit">Удаленный склад</div>
+                <div class="header__value">{* total.remote *} ₽</div>
+              </div>
+            </li>
+            <li class="header__item">
+              <div class="header__icon">
+                <img loading="lazy" src="{% static 'main/img/path-blue.svg' %}" class="image" width="22" height="22" alt="path">
+              </div>
+              <div class="header__info">
+                <div class="header__crit">В пути</div>
+                <div class="header__value">{* total.way *} ₽</div>
+              </div>
+            </li>
+          </ul>
+          <button class="btn-reset btn header__btn header__btn--path" v-on:click="switchScreenMain('screenBasketMain')">
+            <img loading="lazy" src="{% static 'main/img/path.svg' %}" class="image" width="28" height="28" alt="path">
+            <div class="header__info">
+              <div class="header__crit header__crit--btn">Оформить</div>
+              <div class="header__value header__value--btn">{* total.total *} ₽</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    
+    <main class="main" id="screenCatalogMain">
+      <div class="main__container container">
+        
+        {% include "main/menu.html" %}
+
+        <!-- BANNERS-->
+       {% include "main/banners.html" %}
+       
+       <!------>
+        <div class="main__content" id="screenCatalog" style="display:''">
+          <section class="filtr">
+            <h2 class="filtr__title">Фильтр</h2>
+            <div class="filtr__content">
+              <div class="dropdown-container">
+                <div class="dropdown-wrap">
+                  <input type="text" class="filtr__dropdown select-selected dropdown" id="plant_type_4" placeholder="Все">
+                  <span class="dropdown-trigger" aria-hidden="true" data-trigger="plant_type_4">
+                    <img loading="lazy" src="{% static 'main/img/arrow-down.svg' %}" class="image" width="" height="" alt="">
+                  </span>
+                  <div class="select-items dropdown-list">
+                    <div class="dropdown-option" v-on:click="FilterAvailability('all')" >Все</div>
+                    <div class="dropdown-option" v-on:click="FilterAvailability('stock')">В наличии</div>
+                    <div class="dropdown-option" v-on:click="FilterAvailability('remote')">Удаленный склад</div>
+                    <div class="dropdown-option" v-on:click="FilterAvailability('way')">В пути</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dropdown-container">
+                <div class="dropdown-wrap">
+                  <input type="text" class="filtr__dropdown select-selected dropdown1" id="plant_type_2" placeholder="Вес">
+                  <span class="dropdown-trigger" aria-hidden="true" data-trigger="plant_type_2">
+                    <img loading="lazy" src="{% static 'main/img/arrow-down.svg' %}" class="image" width="" height="" alt="">
+                  </span>
+                  <div class="select-items dropdown-list1">
+                    <div class="dropdown-option1" v-on:click="FilterWeight('10')">10</div>
+                    <div class="dropdown-option1" v-on:click="FilterWeight('10')">100</div>
+                    <div class="dropdown-option1" v-on:click="FilterWeight('10')">1000</div>
+                    <div class="dropdown-option1" v-on:click="FilterWeight('10')">10000</div>
+                  </div>
+                </div>
+              </div>
+              <div class="filtr__btns">
+                <label class="btn-reset checkbox-btn filtr__btn">
+                  <input type="checkbox" v-model="status" value='TOP' v-on:change="FilterStatus()">
+                  <span class="filtr__span filtr__span--orange">
+                    <svg class="filtr__svg filtr__svg--top">
+                      <use xlink:href="/static/main/img/sprite.svg#top"></use>
+                    </svg>
+                  </span>
+                </label>
+                <label class="btn-reset checkbox-btn filtr__btn">
+                  <input type="checkbox" v-model="status" value='NEW' v-on:change="FilterStatus()">
+                  <span class="filtr__span filtr__span--green">
+                    <svg class="filtr__svg filtr__svg--new">
+                      <use xlink:href="/static/main/img/sprite.svg#new"></use>
+                    </svg>
+                  </span>
+                </label>
+                <label class="btn-reset checkbox-btn filtr__btn">
+                  <input type="checkbox" v-model="status" value='SALE' v-on:change="FilterStatus()">
+                  <span class="filtr__span filtr__span--red">
+                    <svg class="filtr__svg filtr__svg--sale">
+                      <use xlink:href="/static/main/img/sprite.svg#sale"></use>
+                    </svg>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </section>
+          <section class="main-content">
+            <h2 class="visually-hidden title">Каталог</h2>
+            <div class="main-content__head main-head">
+              <ul class="list-reset main-head__list">
+                <li class="main-head__item">Наименование</li>
+                <li class="main-head__item">Выбор склада</li>
+                <li class="main-head__item">Остаток</li>
+                <li class="main-head__item">Цена шт. </li>
+                <li class="main-head__item">Цена итого</li>
+              </ul>
+            </div>
+            <div class="main-content__body main-body">
+              <ul class="list-reset main-body__list accordion" v-for="item in catalog" style="margin-bottom: 7px;">
+                <li :class="'main-body__item accordion-item accordion-item--'+item.color">
+                  <button :tabBtn="item.id" v-on:click="openTab(item.id)" class="btn-reset btn--accordion main-body__accordion accordion-header">
+
+                    <span :triagleTab="item.id" class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+
+                    {* item.name *}</button>
+                  <div class="main-body__panel" :tab="item.id" style="display:none">
+                    <ul class="list-reset main-body__sublist accordion accordion-child">
+                      <li class="main-body__subitem accordion-item" v-for="list in item.id_product_list">
+                        <button :panelBtn="list.id" style="margin-bottom: 8px;" v-on:click="openPanel(list.id)" class="btn-reset btn--accordion main-body__accordion accordion-header">
+
+                          <span :triaglePanel="list.id" class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+
+                          {* list.name *}
+                          <div class="tooltip">
+                            <img loading="lazy" src="/static/main/img/tooltip.svg" class="image" width="20" height="20"
+                              alt="tooltip">
+                            <span class="tooltip__text">
+                              <ul class="list-reset tooltip__list">
+                                <li class="tooltip__item">Блок {* list.carton *} шт.</li>
+                                <li class="tooltip__item">РРЦ {* list.rrc *} ₽/шт.</li>
+                              </ul>
+                            </span>
+                          </div>
+                        </button>
+                        <div class="main-body__panel" :panel="list.id" style="padding-bottom: 10px; display: none">
+                          <ul class="list-reset main-body__sublist" v-for="product in list.id_product">
+                            <li class="main-body__subitem">
+                              <div class="product product--main accordion" id="product-1">
+                                <div class="product__items">
+                                  <div class="product__left">
+                                    <img v-bind:src="'/media/media/' + product.img.split('/media/media/')[1]" alt="product" class="image product__img minimized">
+                                    <h3 class="product__title">{* product.name*}</h3>
+                                    <div class="product__icon">
+                                      <img loading="lazy" :src="'/static/main/img/' + product.status + '.svg'" class="image" width="23" height="27"
+                                        alt="top">
+                                    </div>
+                                  </div>
+
+                                  <div style="display:none">
+                                    <div v-if="product.stock.availability != 0 && product.way.availability != 0 && product.remote.availability != 0">
+                                      {* arr={"way": product.way, "remote": product.remote }*}
+                                    </div>
+                                    <div v-else-if="product.stock.availability != 0 && product.way.availability != 0 && product.remote.availability == 0">
+                                      {* arr={"way": product.way} *}
+                                    </div>
+                                    <div v-else-if="product.stock.availability != 0 && product.way.availability == 0 && product.remote.availability != 0">
+                                      {* arr={"remote": product.remote}*}
+                                    </div>
+                                    <div v-else-if="product.stock.availability == 0 && product.way.availability != 0 && product.remote.availability != 0">
+                                      {* arr={"remote": product.remote} *}
+                                    </div>
+                                    <div v-else-if="product.stock.availability == 0 && product.way.availability == 0 && product.remote.availability != 0">
+                                      {* arr=[]*}
+                                    </div>
+                                    <div v-else-if="product.stock.availability == 0 && product.way.availability != 0 && product.remote.availability == 0">
+                                      {* arr=[]*}
+                                    </div>
+                                    <div v-else-if="product.stock.availability != 0 && product.way.availability == 0 && product.remote.availability == 0">
+                                      {* arr=[]*}
+                                    </div>
+                                  </div>
+
+                                  <!-- В НАЛИЧИИ -->
+                                  <ul class="list-reset product__right-list" v-if="product.stock.availability != 0">
+                                    
+                                    <li class="product__right-item product__right-item--main ">
+
+                                      <button :availabilityBtn="product.id" v-if="arr.length != 0" v-on:click="openProductsList(product.id)" class="btn-reset product__presence">В наличии</button>
+                                      <button :availabilityBtn="product.id" v-else v-on:click="openProductsList(product.id)" class="btn-reset product__presence product__presence--not-arrow">В наличии</button>
+
+                                      
+                                      <div class="product__residue">{* product.stock.availability *}</div>
+
+                                      <button class="btn-reset btn btn--product product__btn" v-on:click="openCalc(product.id, 'stock')" availability="stock" :openCalcBtn="product.id">
+                                        <img loading="lazy" src="/static/main/img/path.svg" class="image" width="22" height="22" alt="path">
+                                        Добавить
+                                      </button>
+
+                                      <div class="product__calc product-calc" style="display: none;" availability="stock" :calc="product.id">
+                                        <button class="btn-reset product-calc__btn product-calc__btn--minus" v-on:click="calcMinus(product.id, 'stock')"></button>
+                                        <div class="product-calc__value">
+                                          <input type="number" class="input input--calc" :calcInput="product.id" availability="stock" :value="product.stock.count" v-on:input="calcInput(product.id, 'stock')">
+                                          <span>{* product.stock.block *} блоков {* product.stock.remainder *} шт</span>
+                                        </div>
+                                        <button class="btn-reset product-calc__btn product-calc__btn--plus" v-on:click="calcPlus(product.id, 'stock')"></button>
+                                      </div>
+
+
+                                      <div class="product__size">{* product.price *} ₽</div>
+                                      <div v-if="product.stock.total != 0" class="product__size-all">{* product.stock.total *} ₽</div>
+                                      <div v-else class="product__size-all product__size-all--zero">{* product.stock.total *} ₽</div>
+                                    </li>
+                                  </ul>
+                                  
+                                  <!-- В ПУТИ -->
+
+                                  <ul class="list-reset product__right-list" v-else-if="product.way.availability != 0 && product.stock.availability == 0">
+                                  
+                                    <li class="product__right-item product__right-item--main ">
+
+                                      <button :availabilityBtn="product.id" v-if="arr.length != 0" v-on:click="openProductsList(product.id)" class="btn-reset product__presence product__presence--blue">В пути</button>
+                                      <button :availabilityBtn="product.id" v-else v-on:click="openProductsList(product.id)" class="btn-reset product__presence product__presence--blue product__presence--not-arrow">В пути</button>
+                                      
+                                      <div class="product__residue">{* product.way.availability *}</div>
+
+                                      <button class="btn-reset btn btn--product product__btn" v-on:click="openCalc(product.id, 'way')" availability="way" :openCalcBtn="product.id">
+                                        <img loading="lazy" src="/static/main/img/path.svg" class="image" width="22" height="22" alt="path">
+                                        Добавить
+                                      </button>
+
+
+                                      <div class="product__calc product-calc" style="display: none;" availability="way" :calc="product.id">
+                                        <button class="btn-reset product-calc__btn product-calc__btn--minus" v-on:click="calcMinus(product.id, 'way')"></button>
+                                        <div class="product-calc__value">
+                                          <input type="number" class="input input--calc" :value="product.way.count" :calcInput="product.id" availability="way" v-on:input="calcInput(product.id, 'way')">
+                                          <span>{* product.way.block *} блоков {* product.way.remainder *} шт</span>
+                                        </div>
+                                        <button class="btn-reset product-calc__btn product-calc__btn--plus" v-on:click="calcPlus(product.id, 'way')"></button>
+                                      </div>
+
+
+                                      <div class="product__size">{* product.price *} ₽</div>
+                                      <div v-if="product.way.total != 0" class="product__size-all">{* product.way.total *} ₽</div>
+                                      <div v-else class="product__size-all product__size-all--zero">{* product.way.total *} ₽</div>
+                                    </li>
+                                  </ul>
+
+
+                                  <!-- УДАЛЕННЫЙ -->
+
+                                  <ul class="list-reset product__right-list" v-else-if="product.remote.availability != 0 && product.stock.availability == 0 && product.way.availability == 0">
+                                    
+                                    <li class="product__right-item product__right-item--main">
+
+                                      <button :availabilityBtn="product.id" v-if="arr.length != 0" v-on:click="openProductsList(product.id)" class="btn-reset product__presence product__presence--orange">Удаленный склад</button>
+                                      <button :availabilityBtn="product.id" v-else  v-on:click="openProductsList(product.id)"  class="btn-reset product__presence product__presence--orange product__presence--not-arrow">Удаленный склад</button>
+
+                                      <div class="product__residue">{* product.remote.availability *}</div>
+
+                                      <button class="btn-reset btn btn--product product__btn" v-on:click="openCalc(product.id, 'remote')" availability="remote" :openCalcBtn="product.id">
+                                        <img loading="lazy" src="/static/main/img/path.svg" class="image" width="22" height="22" alt="path">
+                                        Добавить
+                                      </button>
+
+                                      <div class="product__calc product-calc" style="display: none;" availability="remote" :calc="product.id">
+                                        <button class="btn-reset product-calc__btn product-calc__btn--minus" v-on:click="calcMinus(product.id, 'remote')"></button>
+                                        <div class="product-calc__value">
+                                          <input type="number" class="input input--calc" :value="product.remote.count" :calcInput="product.id" :availability="name" :calcInput="product.id" availability="remote" v-on:input="calcInput(product.id, 'remote')">
+                                          <span>{* product.remote.block *} блоков {* product.remote.remainder *} шт</span>
+                                        </div>
+                                        <button class="btn-reset product-calc__btn product-calc__btn--plus" v-on:click="calcPlus(product.id, 'remote')"></button>
+                                      </div>
+                                      <div class="product__size">{* product.price *} ₽</div>
+                                      <div v-if="product.remote.total != 0" class="product__size-all">{* product.remote.total *} ₽</div>
+                                      <div v-else class="product__size-all product__size-all--zero">{* product.remote.total *} ₽</div>
+                                    </li>
+                                  </ul>
+
+
+                                </div>
+                              </div>
+
+
+                              <!--Выпадающий спиок -->
+                              <div :availabilityList="product.id" class="product-accordion-content product-accordion-content" v-if="arr.length != 0">
+                                <ul class="list-reset product__right-list product__right-list--accordion">
+                                  <li class="product__right-item"  v-for="(availability, name) in arr" v-if="availability.availability != 0 && arr.length != 0">
+
+                                    <div :class="'product__presence product__presence--'+availability.color">{* availability.name *}</div>
+
+                                    <div class="product__residue">{* availability.availability *}</div>
+
+                                    <button class="btn-reset btn btn--product product__btn" v-on:click="openCalc(product.id, name)" :availability="name" :openCalcBtn="product.id">
+                                      <img loading="lazy" src="/static/main/img/path.svg" class="image" width="22" height="22" alt="path">
+                                      Добавить
+                                    </button>
+
+                                    <div class="product__calc product-calc" style="display: none" :availability="name" :calc="product.id">
+                                      <button class="btn-reset product-calc__btn product-calc__btn--minus" v-on:click="calcMinus(product.id, name)"></button>
+
+                                      <div class="product-calc__value">
+                                        <input type="number" class="input input--calc" :value="availability.count" :availability="name" :calcInput="product.id" v-on:input="calcInput(product.id, name)">
+                                        <span>{* availability.block *} блоков {* availability.remainder *} шт</span>
+                                      </div>
+
+                                      <button class="btn-reset product-calc__btn product-calc__btn--plus" v-on:click="calcPlus(product.id, name)"></button>
+                                    </div>
+                                    <div class="product__size">{* product.price *} ₽</div>
+
+                                    <div v-if="availability.total != 0" class="product__size-all">{* availability.total *} ₽</div>
+                                    <div v-else class="product__size-all product__size-all--zero">{* availability.total *} ₽</div>
+                                    
+                                  </li>
+                                </ul>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+    
+      <!-- BASKET-->
+      {% include "main/basket.html" %}
+      <!------>
+
+      <!-- BASKET-->
+      {% include "main/account.html" %}
+      <!------>
+
+            <!-- CATALOG-->
+      {% include "main/catalog.html" %}
+      <!-- --- -->
+
+       
+
+    
+
+       
+      
+    </div>
+  </div>
+  <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="{% static 'main/js/CatalogBasket.js' %}"></script>
+</body>
+{% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru" class="page">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#111111">
+  <title>{{ title }}</title>
+  <link rel="preload" href="{% static 'main/fonts/LucidaGrande-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'main/fonts/RFDewi-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'main/fonts/RFDewi-Regular.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'main/fonts/RFDewi-Semibold.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'main/fonts/RFDewi-Ultrabold.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{% static 'main/css/vendor.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+  <script defer src="{% static 'main/js/main.js' %}"></script>
+  <!-- select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+  <script src="https://unpkg.com/combobo@2.0.1/dist/combobo.js"></script>
+</head>
+
+<body class="page__body">
+  <div class="site-container">
+    <main class="main">
+      <section class="login">
+        <div class="login__container container">
+          <h1 class="title visually-hidden">Tobaco Authorization</h1>
+          <div class=" login__logo">
+            <img loading="lazy" src="/static/main/img/tobacco.svg" class="image" width="295" height="42" alt="Tobacco">
+          </div>
+          <form action="{% url 'auth' %}" method="post" class="form login__form">
+            {% csrf_token %}
+            <label class="form__label label login__label">
+              <input type="email"
+                     name="email"
+                     class="input-reset form__input input login__input"
+                     placeholder="Электронный адрес">
+            </label>
+            <label class="form__label label login__label password">
+              <input type="password"
+                     name="password"
+                     id="password-input"
+                     class="input-reset form__input input login__input"
+                     placeholder="Пароль">
+              <button class="btn-reset password__control"></button>
+            </label>
+            <button class="btn-reset btn form__btn login__btn">
+              <svg class="">
+                <img style="margin-right: 25%;" src="{% static 'main/img/long_right.svg' %}">
+              </svg>
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+  </div>
+  <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+</body>
+
+</html>

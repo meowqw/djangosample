@@ -1,0 +1,195 @@
+{% load static %}
+
+<div class="graph-modal">
+    <div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="menu">
+        <button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно">x</button>
+        <div class="graph-modal__content menu">
+            <ul class="list-reset menu__list">
+                <li class="menu__item menu__item--green">
+                    <h2 class="menu__title">Аксессуары для кальяна</h2>
+
+                    {% for category in categories %}
+                    {% if category.name == 'Aкксессуары для кальяна'%}
+                    {% for main_product in category.id_main_product %}
+                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                        color="{{category.color}}" type="mainProductCatalog"
+                        id="{{main_product.id}}">{{main_product.name}}
+
+                        <span>
+                            <svg class="menu__link-icon">
+                                <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                            </svg>
+                        </span>
+
+                    </button>
+
+
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                </li>
+                <div class="menu__list-column">
+                    <li class="menu__item menu__item--orange">
+                        <h2 class="menu__title">Кальяны</h2>
+                        {% for category in categories %}
+                        {% if category.name == 'Кальяны' %}
+                        {% for main_product in category.id_main_product.all %}
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                            color="{{category.color}}" type="mainProductCatalog"
+                            id="{{main_product.id}}">{{main_product.name}}
+
+                            <span>
+                                <svg class="menu__link-icon">
+                                    <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                                </svg>
+                            </span>
+
+                        </button>
+
+
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li class="menu__item menu__item--yellow">
+                        <h2 class="menu__title">Лимонады</h2>
+                        {% for category in categories %}
+                        {% if category.name == 'Лимонады' %}
+                        {% for main_product in category.id_main_product.all %}
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                            color="{{category.color}}" type="mainProductCatalog"
+                            id="{{main_product.id}}">{{main_product.name}}
+                            <span>
+                                <svg class="menu__link-icon">
+                                    <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                                </svg>
+                            </span>
+
+
+                        </button>
+
+
+
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li class="menu__item menu__item--light-pink">
+                        <h2 class="menu__title">Мерч</h2>
+                        {% for category in categories %}
+                        {% if category.name == 'Мерч' %}
+                        {% for main_product in category.id_main_product.all %}
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                            color="{{category.color}}" type="mainProductCatalog"
+                            id="{{main_product.id}}">{{main_product.name}}</button>
+
+
+                        <span>
+                            <svg class="menu__link-icon">
+                                <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                            </svg>
+                        </span>
+
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </li>
+                </div>
+                <li class="menu__item menu__item--blue">
+                    <h2 class="menu__title">Табак для кальяна </h2>
+                    {% for category in categories %}
+                    {% if category.name == 'Табак для кальяна' %}
+                    {% for main_product in category.id_main_product.all %}
+                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                        color="{{category.color}}" type="mainProductCatalog"
+                        id="{{main_product.id}}">{{main_product.name}}
+
+                        <span>
+                            <svg class="menu__link-icon">
+                                <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                            </svg>
+                        </span>
+
+                    </button>
+
+
+
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                </li>
+                <div class="menu__list-column">
+                    <li class="menu__item menu__item--purple">
+                        <h2 class="menu__title">Уголь</h2>
+                        {% for category in categories %}
+                        {% if category.name == 'Уголь' %}
+                        {% for main_product in category.id_main_product.all %}
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                            color="{{category.color}}" type="mainProductCatalog"
+                            id="{{main_product.id}}">{{main_product.name}}
+                            <span>
+                                <svg class="menu__link-icon">
+                                    <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                                </svg>
+                            </span>
+
+                        </button>
+
+
+
+
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </li>
+                    <li class="menu__item menu__item--red">
+                        <h2 class="menu__title">Pod-системы</h2>
+                        {% for category in categories %}
+                        {% if category.name == 'Pod-системы' %}
+                        {% for main_product in category.id_main_product.all %}
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                            color="{{category.color}}" type="mainProductCatalog"
+                            id="{{main_product.id}}">{{main_product.name}}
+                            <span>
+                                <svg class="menu__link-icon">
+                                    <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                                </svg>
+                            </span>
+
+                        </button>
+
+
+
+
+                        {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </li>
+                </div>
+                <li class="menu__item menu__item--pink">
+                    <h2 class="menu__title">Жидкости</h2>
+                    {% for category in categories %}
+                    {% if category.name == 'Жидкости' %}
+                    {% for main_product in category.id_main_product.all %}
+                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
+                        color="{{category.color}}" type="mainProductCatalog"
+                        id="{{main_product.id}}">{{main_product.name}}
+
+
+                        <span>
+                            <svg class="menu__link-icon">
+                                <use xlink:href="/static/main/img/sprite.svg#close"></use>
+                            </svg>
+                        </span>
+
+                    </button>
+
+
+
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                </li>
+            </ul>
+        </div>
+    </div>

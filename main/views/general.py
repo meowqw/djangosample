@@ -4,4 +4,4 @@ from django.contrib.auth.decorators import login_required
 
 def pageNotFound(request, exception):
     """404"""
-    return redirect('authorization')
+    return redirect('auth')

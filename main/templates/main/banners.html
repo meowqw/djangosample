@@ -1,0 +1,15 @@
+{% load static %}
+
+<div class="main__content" id="screenBanners" style="display:none">
+  <section class="banners">
+    <ul class="list-reset banners__list">
+      {% for banner in banners %}
+      <li class="banners__item">
+        <div class="banner">
+          <img src="/media/{{banner.img}}">
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>

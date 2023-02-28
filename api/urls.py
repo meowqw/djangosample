@@ -5,6 +5,14 @@ from rest_framework import routers
 from api.views import *
 
 urlpatterns = [
-   path('account/<int:pk>', AccountAPIDetailView.as_view()),
-   path('accountList/', AccountAPIList.as_view()),
+   path('MainCategory/', MainCategoryView.as_view({'get': 'list'})),
+   path('ProductsByMainProduct/', ProductsByMainProductView.as_view({'get': 'list'})),
+   path('CategoryByProduct/', CategoryByProductView.as_view({'get': 'list'})),
+   path('CategoryByID/', CategoryByID.as_view({'get': 'list'})),
+   
+   path('ProductsByMainProductFilter/', ProductsByMainProductFilterView.as_view({'get': 'list'})),
+   
+   
+   
+   
 ]

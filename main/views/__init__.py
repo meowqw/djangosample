@@ -1,2 +1,3 @@
-from .index import *
+from .auth import *
 from .general import *
+from .main import *

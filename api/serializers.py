@@ -1,13 +1,34 @@
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from account.models import Account
+from main.models import *
 
+        
 
-class AccountSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+        
+class ProductListSerializer(serializers.ModelSerializer):
+    id_product = ProductSerializer(many=True)
     
     class Meta:
-        model = Account
-        # fields = ("fname", "email")
-        fields = "__all__"
+        model = ProductList
+        fields = '__all__'
+        
+class MainProductSerializer(serializers.ModelSerializer):
+    id_product_list = ProductListSerializer(many=True)
+    
+    class Meta:
+        model = MainProduct
+        fields = '__all__'
+        
+class MainCategorySerializer(serializers.ModelSerializer):
+    id_main_product = MainProductSerializer(many=True)
+    # id_product_list = ProductListSerializer(many=True)
+    
+    
+    class Meta:
+        model = MainCategory
+        fields = '__all__'

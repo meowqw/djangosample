@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     # my
     'main.apps.MainConfig',  # main app
-    'account.apps.AccountConfig',  # custom auth
     'api.apps.ApiConfig',  # api app
 ]
 
@@ -73,8 +72,6 @@ TEMPLATES = [
         },
     },
 ]
-
-AUTH_USER_MODEL = 'account.Account'
 WSGI_APPLICATION = 'app.wsgi.application'
 
 
@@ -139,6 +136,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'main.authentication.UserBackend',
+]
 
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

@@ -3,15 +3,9 @@ from .views import *
 from app import settings
 from django.conf.urls.static import static
 
-from account.views import (registration_view, logout_view, login_view)
-
 urlpatterns = [
-    path('', index, name="index"),
-
-    # account
-    path('registration/', registration_view, name="registration"), 
-    path('logout/', logout_view, name="logout"),
-    path('authorization/', login_view, name="authorization"),
+    path('auth/', auth, name="auth"),
+    path('', main, name="main"),
 ]
 
 if settings.DEBUG:

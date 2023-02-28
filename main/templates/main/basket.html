@@ -1,0 +1,141 @@
+{% load static %}
+<main class="main" id="screenBasketMain" style="display:none">
+  <section class="ordering">
+    <div class="ordering__container container">
+      <h1 class="ordering__title">Оформление заказа</h1>
+      <div class="ordering__content">
+        <!-- добавлены модификаторы для цвета "--orange" -->
+        
+        <div v-for="(products, cat) in basket"
+          :class="'ordering__item ordering-item ordering-item--'+categories[cat].color">
+          <div class="ordering-item__head">
+            <h2 class="ordering-item__title">{* categories[cat].name *}</h2>
+            <ul class="list-reset ordering-item__head-list">
+              <div class="ordering-item__head-item">Остаток</div>
+              <div class="ordering-item__head-item">Цена шт.</div>
+              <div class="ordering-item__head-item">Цена итого</div>
+            </ul>
+          </div>
+          <div class="ordering-item__body">
+            <div class="product ordering-item__product" v-for="product in products">
+              <div class="product__items product__items--ordering">
+                <div class="product__left">
+                  <img v-bind:src="'/media/media/' + product.img.split('/media/media/')[1]" alt="product"
+                    class="image product__img">
+                  <h3 class="product__title">{* product.name *}</h3>
+                </div>
+                <ul class="list-reset product__right-list">
+                  <li class="product__right-item" v-if="product.stock.total != 0">
+                    <div class="product__presence product__presence--ordering">{* product.stock.name *}</div>
+                    <div class="product__residue">{*product.stock.availability*}</div>
+                    <div class="product__calc product-calc">
+                      <button class="btn-reset product-calc__btn product-calc__btn--minus"
+                        v-on:click="calcMinus(product.id, 'stock')"></button>
+                      <div class="product-calc__value">
+                        <input type="number" class="input input--calc" :value="product.stock.count"
+                          :calcInput="product.id" availability="stock" v-on:input="calcInput(product.id, 'stock')">
+                        <span>{* product.stock.block *} блоков {* product.stock.remainder *} шт</span>
+                      </div>
+                      <button class="btn-reset product-calc__btn product-calc__btn--plus"
+                        v-on:click="calcPlus(product.id, 'stock')"></button>
+                    </div>
+                    <div class="product__size">{* product.price *} ₽</div>
+                    <div class="product__size-all product__size-all--ordering">{* product.stock.total *} ₽</div>
+                    <button class="btn-reset product__btn product__btn--close"></button>
+                  </li>
+
+                  <li class="product__right-item" v-if="product.way.total != 0">
+                    <div class="product__presence product__presence--blue">{* product.way.name *}</div>
+                    <div class="product__residue">{*product.way.availability*}</div>
+                    <div class="product__calc product-calc">
+                      <button class="btn-reset product-calc__btn product-calc__btn--minus"
+                        v-on:click="calcMinus(product.id, 'way')"></button>
+                      <div class="product-calc__value">
+                        <input type="number" class="input input--calc" :value="product.way.count"
+                          :calcInput="product.id" availability="way" v-on:input="calcInput(product.id, 'way')">
+                        <span>{* product.way.block *} блоков {* product.way.remainder *} шт</span>
+                      </div>
+                      <button class="btn-reset product-calc__btn product-calc__btn--plus"
+                        v-on:click="calcPlus(product.id, 'way')"></button>
+                    </div>
+                    <div class="product__size">{* product.price *} ₽</div>
+                    <div class="product__size-all product__size-all--ordering">{* product.way.total *} ₽</div>
+                    <button class="btn-reset product__btn product__btn--close"></button>
+                  </li>
+
+                  <li class="product__right-item" v-if="product.remote.total != 0">
+                    <div class="product__presence product__presence--orange">{* product.remote.name *}</div>
+                    <div class="product__residue">{*product.remote.availability*}</div>
+                    <div class="product__calc product-calc">
+                      <button class="btn-reset product-calc__btn product-calc__btn--minus"
+                        v-on:click="calcMinus(product.id, 'remote')"></button>
+                      <div class="product-calc__value">
+                        <input type="number" class="input input--calc" :value="product.remote.count"
+                          :calcInput="product.id" availability="remote" v-on:input="calcInput(product.id, 'remote')">
+                        <span>{* product.remote.block *} блоков {* product.remote.remainder *} шт</span>
+                      </div>
+                      <button class="btn-reset product-calc__btn product-calc__btn--plus"
+                        v-on:click="calcPlus(product.id, 'remote')"></button>
+                    </div>
+                    <div class="product__size">{* product.price *} ₽</div>
+                    <div class="product__size-all product__size-all--ordering">{* product.remote.total *} ₽</div>
+                    <button class="btn-reset product__btn product__btn--close"></button>
+
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+          <div class="ordering-item__bottom">
+            <div class="ordering-item__total">
+              Итого: {* calcTotalCategory(products) *} ₽
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ordering__footer ordering-footer">
+        <div class="header__right ordering-footer__item">
+          <ul class="list-reset header__list">
+            <li class="header__item">
+              <div class="header__icon">
+                <img loading="lazy" src="/static/main/img/path-green.svg" class="image" width="22" height="22"
+                  alt="path">
+              </div>
+              <div class="header__info">
+                <div class="header__crit">В наличии</div>
+                <div class="header__value">{* total.stock *} ₽</div>
+              </div>
+            </li>
+            <li class="header__item">
+              <div class="header__icon">
+                <img loading="lazy" src="/static/main/img/path-orange.svg" class="image" width="22" height="22"
+                  alt="path">
+              </div>
+              <div class="header__info">
+                <div class="header__crit">Удаленный склад</div>
+                <div class="header__value">{* total.remote *} ₽</div>
+              </div>
+            </li>
+            <li class="header__item">
+              <div class="header__icon">
+                <img loading="lazy" src="/static/main/img/path-blue.svg" class="image" width="22" height="22"
+                  alt="path">
+              </div>
+              <div class="header__info">
+                <div class="header__crit">В пути</div>
+                <div class="header__value">{* total.way *} ₽</div>
+              </div>
+            </li>
+          </ul>
+          <div class="ordering__total">Всего: {* total.total *} ₽</div>
+        </div>
+        <div class="ordering-footer__item">
+          <button class="btn-reset btn-red btn-red--clear" @click="clearBasket()">Очистить корзину</button>
+          <button class="btn-reset btn ordering-footer__btn">Далее</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
