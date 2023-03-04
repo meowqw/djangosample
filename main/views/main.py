@@ -19,5 +19,18 @@ def main(request):
     account = Account.objects.get(user=request.user)
     context['account'] = account
     
+    addresses = DeliveryAddresses.objects.all()
+    context['addresses'] = addresses
+    
+    orders = Order.objects.filter(user=request.user).all().order_by('-time_create')
+    context['orders'] = orders
+    
+    debt = 0
+    # сумма задолжнности
+    for order in orders:
+        debt += order.debt
+    
+    context['debt'] = debt
+    
     
     return render(request, 'main/main.html', context)

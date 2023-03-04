@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('auth/', auth, name="auth"),
     path('', main, name="main"),
+    path('logout/', log_out, name="logout"),
+    
 ]
 
 if settings.DEBUG:

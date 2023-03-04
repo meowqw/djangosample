@@ -43,7 +43,7 @@
                   </li>
                 </ul>
                 <div class="my-data__bottom">
-                  <button class="btn-reset btn-red btn-red--exit">Выйти из аккаунта</button>
+                  <button class="btn-reset btn-red btn-red--exit" onclick="location.href='/logout'">Выйти из аккаунта</button>
                 </div>
               </div>
               <div class="tabs-section-footer">
@@ -59,38 +59,49 @@
           <div class="tabs__panel account-tabs__panel">
             <section class="my-orders">
               <h2 class="visually-hidden">Аккаунт</h2>
+              
               <div class="my-orders__body tabs-section-body">
                 <div class="my-orders__filtr account-filtr">
                   <h3 class="my-orders__subtitle account-filtr__title">Фильтр</h3>
+                  
                   <div class="account-filtr__item account-filtr__calendar calendar">
                     <input type="text" id="input" class="calendar__input datepicker-here calendar"
-                      placeholder="Календарь" data-position="right top">
+                      placeholder="Календарь" data-position="right top" autocomplete="off">
                     <img loading="lazy" src="/static/main/img/calendar.svg" class="calendar__icon" width="22" height="22"
                       alt="calendar">
                     <!-- кнопка close -->
                     <img loading="lazy" src="/static/main/img/close-black.svg" class="calendar__icon calendar__icon--close"
                       width="22" height="22" alt="calendar">
                   </div>
-                  <div class="account-filtr__item account-filtr__item--type filtr__dropdown">
-                    <span class="notice">3</span>
-                    <div class="custom-select">
-                      <select>
-                        <option value="0">Марракеш Ясень</option>
-                        <option value="1">Марракеш Шиша</option>
-                        <option value="2">Марракеш 2</option>
-                        <option value="3">Марракеш 3</option>
-                        <option value="4">Марракеш 4</option>
-                      </select>
+                  <div class="dropdown-container" style="margin-right: 2%;">
+                    <div class="dropdown-wrap">
+                      <input type="text" class="filtr__dropdown select-selected dropdown2" id="plant_type_7"
+                        placeholder="Адрес">
+                      <span class="dropdown-trigger" aria-hidden="true" data-trigger="plant_type_7">
+                        <img loading="lazy" src="{% static 'main/img/arrow-down.svg' %}" class="image" width="" height=""
+                          alt="">
+                      </span>
+                      <div class="select-items dropdown-list2">
+                        {% for address in addresses %}
+                        <div class="dropdown-option2" v-on:click="FilterAddress({{address.id}})">{{address.address}}</div>
+                        {% endfor %}
+                      </div>
                     </div>
                   </div>
-                  <div class="account-filtr__item account-filtr__item--payment filtr__dropdown">
-                    <div class="custom-select">
-                      <select>
-                        <option value="0">Оплата</option>
-                        <option value="1">Оплата</option>
-                        <option value="2">Оплата</option>
-                        <option value="3">Оплата</option>
-                      </select>
+                 
+                  <div class="dropdown-container">
+                    <div class="dropdown-wrap">
+                      <input type="text" class="filtr__dropdown select-selected dropdown3" id="plant_type_8"
+                        placeholder="Оплата">
+                      <span class="dropdown-trigger" aria-hidden="true" data-trigger="plant_type_8">
+                        <img loading="lazy" src="{% static 'main/img/arrow-down.svg' %}" class="image" width="" height=""
+                          alt="">
+                      </span>
+                      <div class="select-items dropdown-list3">
+                        <div class="dropdown-option3" v-on:click="FilterPaymentStatus('PAID')">Оплачен</div>
+                        <div class="dropdown-option3" v-on:click="FilterPaymentStatus('NOTPAID')">Не оплачен</div>
+                        <div class="dropdown-option3" v-on:click="FilterPaymentStatus('PART')">Частично</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -108,30 +119,42 @@
                   </thead>
                   <tbody class="table__tbody">
                     <!-- item -->
-                    <tr class="table__tr">
+                    <tr class="table__tr" v-for="order in orders">
                       <td class="table__td">
-                        <div class="my-orders__number">G11-3NSTBM</div>
+                        <div class="my-orders__number">{*order.number*}</div>
                       </td>
                       <td class="table__td">
                         <div class="my-orders__data">
-                          17.08.2022
-                          <span>12:57:28</span>
+                          {* processingDate(order.time_create)[0] *}
+                          <span>{* processingDate(order.time_create)[1] *}</span>
                         </div>
                       </td>
                       <td class="table__td">
-                        <div class="my-orders__point">Марракеш Ясень</div>
+                        <div class="my-orders__point">{*order.address.address *}</div>
                       </td>
                       <td class="table__td">
-                        <div class="my-orders__sum">29 200 ₽</div>
+                        <div class="my-orders__sum">{*order.total*} ₽</div>
                       </td>
                       <td class="table__td">
                         <div class="my-orders__pay-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--red">Не оплачен</button>
+                         
+                          <button v-if="order.order_status == 'INPROCESSING'" class="btn-reset my-orders__btn my-orders__btn--red">В обработке</button>
+                         
+                          <button v-else-if="order.order_status == 'SHIPMENT'" class="btn-reset my-orders__btn my-orders__btn--blue">В процессе отгрузки</button>
+                   
+                          <button v-else-if="order.order_status == 'DELIVERED'" class="btn-reset my-orders__btn my-orders__btn--gray">Доставлен</button>
                         </div>
                       </td>
                       <td class="table__td">
                         <div class="my-orders__order-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--pink">В обработке</button>
+
+                          <button v-if="order.payment_status == 'NOTPAID'" class="btn-reset my-orders__btn my-orders__btn--pink">Не оплачен</button>
+                         
+                          <button v-else-if="order.payment_status == 'PAID'" class="btn-reset my-orders__btn my-orders__btn--green">Оплачен</button>
+                  
+                          <button v-else-if="order.payment_status == 'PART'" class="btn-reset my-orders__btn my-orders__btn--orange">Частично</button>
+                          <span v-if="order.payment_status == 'PART'" >Задолжность {* order.debt *} ₽</span>
+
                         </div>
                       </td>
                       <td class="table__td">
@@ -142,113 +165,11 @@
                       </td>
                     </tr>
                     <!-- item -->
-                    <tr class="table__tr">
-                      <td class="table__td">
-                        <div class="my-orders__number">G11-3NSTBM</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__data">
-                          17.08.2022
-                          <span>12:57:28</span>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__point">Марракеш Ясень</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__sum">29 200 ₽</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__pay-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--green">Оплачен</button>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__order-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--blue">В процессе отгрузки</button>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__hide">
-                          <!-- добавлен data атрибут для открытия попапа -->
-                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- item -->
-                    <tr class="table__tr">
-                      <td class="table__td">
-                        <div class="my-orders__number">G11-3NSTBM</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__data">
-                          17.08.2022
-                          <span>12:57:28</span>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__point">Марракеш Ясень</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__sum">29 200 ₽</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__pay-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--green">Оплачен</button>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__order-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--gray">Доставлен</button>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__hide">
-                          <!-- добавлен data атрибут для открытия попапа -->
-                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- item -->
-                    <tr class="table__tr">
-                      <td class="table__td">
-                        <div class="my-orders__number">G11-3NSTBM</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__data">
-                          17.08.2022
-                          <span>12:57:28</span>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__point">Марракеш Ясень</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__sum">29 200 ₽</div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__pay-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--orange">Частично</button>
-                          <span>Задолжность 29 200 ₽</span>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__order-state">
-                          <button class="btn-reset my-orders__btn my-orders__btn--gray">Доставлен</button>
-                        </div>
-                      </td>
-                      <td class="table__td">
-                        <div class="my-orders__hide">
-                          <!-- добавлен data атрибут для открытия попапа -->
-                          <button class="btn-reset btn-hide" data-graph-path="order"></button>
-                        </div>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
               <div class="my-orders__footer">
-                <div class="my-orders__footer-content">Общая задолжность: 29 200 ₽</div>
+                <div class="my-orders__footer-content">Общая задолжность: {{debt}} ₽</div>
               </div>
             </section>
           </div>

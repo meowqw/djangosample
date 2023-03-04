@@ -11,8 +11,9 @@ urlpatterns = [
    path('CategoryByID/', CategoryByID.as_view({'get': 'list'})),
    
    path('ProductsByMainProductFilter/', ProductsByMainProductFilterView.as_view({'get': 'list'})),
+   path('CreateOrder/', CreateOrderAPIVIew.as_view()),
+   path('Order/', OrderAPIView.as_view({'get': 'list'})),
    
-   
-   
+   path('Address/', AddressAPIVIew.as_view({'get': 'list'})),
    
 ]

@@ -24,3 +24,10 @@ def auth(request):
             return redirect('auth')
 
     return render(request, 'main/auth.html', context)
+
+
+@login_required
+def log_out(request):
+    """Logout"""
+    logout(request)
+    return redirect('auth')

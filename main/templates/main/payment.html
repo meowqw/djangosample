@@ -1,334 +1,76 @@
-<!DOCTYPE html>
-<html lang="ru" class="page">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#111111">
-  <title></title>
-  <link rel="preload" href="fonts/LucidaGrande-Bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/RFDewi-Bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/RFDewi-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/RFDewi-Semibold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/RFDewi-Ultrabold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/vendor.css">
-  <link rel="stylesheet" href="css/main.css">
-  <script defer src="js/main.js"></script>
-  <!-- select -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-  <script src="https://unpkg.com/combobo@2.0.1/dist/combobo.js"></script>
-</head>
-
-<body class="page__body">
-  <div class="site-container">
-    <header class="header header--second">
-  <div class="container header__container">
-    <div class="header__left">
-      <div class="header__logo">
-        <img loading="lazy" src="img/tobacco.svg" class="image" width="156" height="22" alt="Tobacco">
-      </div>
-      <button class="btn-reset btn header__btn" data-graph-path="menu" data-btn-open>
-        <img loading="lazy" src="img/hamburger.svg" class="image" width="28" height="28" alt="path">
-        <span>Каталог</span>
-      </button>
-      <button class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
-        <img loading="lazy" src="img/close.svg" class="image" width="28" height="28" alt="path">
-        <span>Каталог</span>
-      </button>
-      <button class="btn-reset btn btn--gray header__user"></button>
-    </div>
-  </div>
-</header>
-
-    <main class="main">
-      <div class="payment__container container">
-        <h1 class="payment__title">Оформление заказа G11-3NSTBM на сумму 29 200 ₽ </h1>
-        <form action="#" class="payment-form payment__form form">
-          <ul class="list-reset payment-form__list form__list">
-            <li class="payment-form__item form__item">
-              <h2 class="payment-form__item-title">Способ получения заказа</h2>
-              <form class="payment-form__item-form">
-                <label class="custom-checkbox payment-form__checkbox">
-                  Доставка
-                  <input type="radio" name="radio" class="custom-checkbox__field" checked="checked">
-                  <span class="custom-checkbox__content"></span>
-                </label>
-                <label class="custom-checkbox payment-form__checkbox">
-                  Самовывоз
-                  <input type="radio" name="radio" class="custom-checkbox__field">
-                  <span class="custom-checkbox__content"></span>
-                </label>
-              </form>
-            </li>
-            <li class="payment-form__item form__item">
-              <h2 class="payment-form__item-title">Точка доставки заказа</h2>
-              <form class="payment-form__item-form payment-form__item-form--column">
-                <label class="custom-checkbox payment-form__checkbox--column">
-                  Косарево 7 / 153025, Россия, Иваново / Марракеш Ясень
-                  <input type="radio" name="radio" class="custom-checkbox__field" checked="checked">
-                  <span class="custom-checkbox__content"></span>
-                </label>
-                <label class="custom-checkbox payment-form__checkbox--column">
-                  Якова Гарелина 2А / 145010, Россия, Иваново / Марракеш Ясень
-                  <input type="radio" name="radio" class="custom-checkbox__field">
-                  <span class="custom-checkbox__content"></span>
-                </label>
-              </form>
-            </li>
-            <li class="payment-form__item form__item">
-              <h2 class="payment-form__item-title">Способ оплаты</h2>
-              <form class="payment-form__item-form">
-                <label class="custom-checkbox payment-form__checkbox">
-                  Наличными
-                  <input type="radio" name="radio" class="custom-checkbox__field" checked="checked">
-                  <span class="custom-checkbox__content"></span>
-                </label>
-                <label class="custom-checkbox payment-form__checkbox">
-                  Расчетный
-                  <input type="radio" name="radio" class="custom-checkbox__field">
-                  <span class="custom-checkbox__content"></span>
-                </label>
-              </form>
-            </li>
-            <li class="payment-form__item form__item">
-              <h2 class="payment-form__item-title">Комментарий к заказу</h2>
-              <form class="payment-form__item-form">
-                <textarea class="payment-form__textarea" placeholder="Введите комментарии" name="comment"></textarea>
-              </form>
-            </li>
-          </ul>
-          <div class="payment-form__bottom">
-            <button class="btn-reset form__btn btn payment-form__btn" data-btn-popup>Оформить заказ</button>
-          </div>
-        </form>
-      </div>
-    </main>
-    <div class="graph-modal">
-  <div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="menu">
-    <button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
-    <div class="graph-modal__content menu">
-      <ul class="list-reset menu__list">
-        <li class="menu__item menu__item--green">
-          <h2 class="menu__title">Аксессуары для кальяна</h2>
-          <button class="btn-reset menu__link">Жидкости для чистки кальяна</button>
-          <button class="btn-reset menu__link menu__link--active menu__link--active-green">
-            Кадило
-            <span>
-              <svg class="menu__link-icon">
-                <use xlink:href="img/sprite.svg#close"></use>
-              </svg>
-            </span>
-          </button>
+{% load static %}
+<main class="main" id="screenPaymentMain" style="display: none;">
+  <div class="payment__container container">
+    <h1 class="payment__title">Оформление заказа {* code *} на сумму {* total.total *} ₽ </h1>
+    <form action="#" class="payment-form payment__form form">
+      <ul class="list-reset payment-form__list form__list">
+        <li class="payment-form__item form__item">
+          <h2 class="payment-form__item-title">Способ получения заказа</h2>
+          <form class="payment-form__item-form">
+            <label class="custom-checkbox payment-form__checkbox">
+              Доставка
+              <input value="DELIVERY" v-model="wayGet" type="radio" name="radio" class="custom-checkbox__field" checked="checked">
+              <span class="custom-checkbox__content"></span>
+            </label>
+            <label class="custom-checkbox payment-form__checkbox">
+              Самовывоз
+              <input value="PICKUP" v-model="wayGet" type="radio" name="radio" class="custom-checkbox__field">
+              <span class="custom-checkbox__content"></span>
+            </label>
+          </form>
         </li>
-        <div class="menu__list-column">
-          <li class="menu__item menu__item--orange">
-            <h2 class="menu__title">Кальяны</h2>
-            <button class="btn-reset menu__link">Кальян 1</button>
-            <button class="btn-reset menu__link menu__link--active menu__link--active-orange">
-              Кальян 2
-              <span>
-                <svg class="menu__link-icon">
-                  <use xlink:href="img/sprite.svg#close"></use>
-                </svg>
-              </span>
-            </button>
-          </li>
-          <li class="menu__item menu__item--yellow">
-            <h2 class="menu__title">Лимонады</h2>
-            <button class="btn-reset menu__link">Лимонад 1</button>
-            <button class="btn-reset menu__link menu__link--active menu__link--active-yellow">
-              Лимонад 2
-              <span>
-                <svg class="menu__link-icon">
-                  <use xlink:href="img/sprite.svg#close"></use>
-                </svg>
-              </span>
-            </button>
-          </li>
-          <li class="menu__item menu__item--light-pink">
-            <h2 class="menu__title">Мерч</h2>
-            <button class="btn-reset menu__link">Мерч 1</button>
-            <button class="btn-reset menu__link menu__link--active menu__link--active-light-pink">
-              Мерч 2
-              <span>
-                <svg class="menu__link-icon">
-                  <use xlink:href="img/sprite.svg#close"></use>
-                </svg>
-              </span>
-            </button>
-          </li>
-        </div>
-        <li class="menu__item menu__item--blue">
-          <h2 class="menu__title">Табак для кальяна </h2>
-          <button class="btn-reset menu__link">Absolute T</button>
-          <button class="btn-reset menu__link menu__link--active menu__link--active-blue">
-            B3
-            <span>
-              <svg class="menu__link-icon">
-                <use xlink:href="img/sprite.svg#close"></use>
-              </svg>
-            </span>
-          </button>
+        <li class="payment-form__item form__item">
+          <h2 class="payment-form__item-title">Точка доставки заказа</h2>
+          <form class="payment-form__item-form payment-form__item-form--column">
+            {% for address in addresses %}
+
+            <!-- {* setAddress({{address.id}}) *} -->
+            <label class="custom-checkbox payment-form__checkbox--column">
+              <input type="radio"  v-model="address" value="{{address.id}}" name="radio" class="custom-checkbox__field">
+              {{address.address}}
+              <span class="custom-checkbox__content"></span>
+            </label>
+            {% endfor %}
+          </form>
         </li>
-        <div class="menu__list-column">
-          <li class="menu__item menu__item--purple">
-            <h2 class="menu__title">Уголь</h2>
-            <button class="btn-reset menu__link">Уголь 1</button>
-            <button class="btn-reset menu__link menu__link--active menu__link--active-purple">
-              Уголь 2
-              <span>
-                <svg class="menu__link-icon">
-                  <use xlink:href="img/sprite.svg#close"></use>
-                </svg>
-              </span>
-            </button>
-          </li>
-          <li class="menu__item menu__item--red">
-            <h2 class="menu__title">Pod-системы</h2>
-            <button class="btn-reset menu__link">BRUSKO Pod</button>
-            <button class="btn-reset menu__link menu__link--active menu__link--active-red">
-              Element Pod
-              <span>
-                <svg class="menu__link-icon">
-                  <use xlink:href="img/sprite.svg#close"></use>
-                </svg>
-              </span>
-            </button>
-          </li>
-        </div>
-        <li class="menu__item menu__item--pink">
-          <h2 class="menu__title">Жидкости</h2>
-          <button class="btn-reset menu__link">BOSHKI</button>
-          <button class="btn-reset menu__link menu__link--active menu__link--active-pink">
-            BRUSKO Salt
-            <span>
-              <svg class="menu__link-icon">
-                <use xlink:href="img/sprite.svg#close"></use>
-              </svg>
-            </span>
-          </button>
+        <li class="payment-form__item form__item">
+          <h2 class="payment-form__item-title">Способ оплаты</h2>
+          <form class="payment-form__item-form">
+            <label class="custom-checkbox payment-form__checkbox">
+              Наличными
+              <input type="radio" name="radio" value="CASH" v-model="paymentMethod" class="custom-checkbox__field" checked="checked">
+              <span class="custom-checkbox__content"></span>
+            </label>
+            <label class="custom-checkbox payment-form__checkbox">
+              Расчетный
+              <input type="radio" name="radio" value="CHECK" v-model="paymentMethod" class="custom-checkbox__field">
+              <span class="custom-checkbox__content"></span>
+            </label>
+          </form>
+        </li>
+        <li class="payment-form__item form__item">
+          <h2 class="payment-form__item-title">Комментарий к заказу</h2>
+          <form class="payment-form__item-form">
+            <textarea v-model="comment" class="payment-form__textarea" placeholder="Введите комментарии" name="comment"></textarea>
+          </form>
         </li>
       </ul>
-    </div>
-  </div>
-  <!-- new-popup-order -->
-  <div class="graph-modal__container graph-modal__container--light" role="dialog" aria-modal="true"
-    data-graph-target="order">
-    <button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
-    <div class="graph-modal__content ordering__content">
-      <div class="ordering__item ordering-item ordering-item--orange">
-        <div class="ordering-item__head">
-          <h2 class="ordering-item__title">Табак для кальяна</h2>
-          <ul class="list-reset ordering-item__head-list">
-            <div class="ordering-item__head-item">Остаток</div>
-            <div class="ordering-item__head-item">Цена шт.</div>
-            <div class="ordering-item__head-item">Цена итого</div>
-          </ul>
-        </div>
-        <div class="ordering-item__body">
-          <div class="product ordering-item__product">
-            <div class="product__items product__items--ordering">
-              <div class="product__left">
-                <img src="img/img.png" alt="product" class="image product__img">
-                <h3 class="product__title">DS Core 250 «Вайт Чокомэрри»</h3>
-              </div>
-              <ul class="list-reset product__right-list">
-                <li class="product__right-item">
-                  <div class="product__presence product__presence--ordering">В наличии</div>
-                  <div class="product__residue">Много</div>
-                  <div class="product__calc product-calc">
-                    <button class="btn-reset product-calc__btn product-calc__btn--minus"></button>
-                    <div class="product-calc__value">
-                      146
-                      <span>14 блоков 6 шт</span>
-                    </div>
-                    <button class="btn-reset product-calc__btn product-calc__btn--plus"></button>
-                  </div>
-                  <div class="product__size">80 ₽</div>
-                  <div class="product__size-all product__size-all--ordering">4 720 ₽</div>
-                  <button class="btn-reset product__btn product__btn--close"></button>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="product ordering-item__product">
-            <div class="product__items product__items--ordering">
-              <div class="product__left">
-                <img src="img/img.png" alt="product" class="image product__img">
-                <h3 class="product__title">DS Core 250 «Вайт Чокомэрри»</h3>
-              </div>
-              <ul class="list-reset product__right-list">
-                <li class="product__right-item">
-                  <div class="product__presence product__presence--ordering">В наличии</div>
-                  <div class="product__residue">Много</div>
-                  <div class="product__calc product-calc">
-                    <button class="btn-reset product-calc__btn product-calc__btn--minus"></button>
-                    <div class="product-calc__value">
-                      146
-                      <span>14 блоков 6 шт</span>
-                    </div>
-                    <button class="btn-reset product-calc__btn product-calc__btn--plus"></button>
-                  </div>
-                  <div class="product__size">80 ₽</div>
-                  <div class="product__size-all product__size-all--ordering">4 720 ₽</div>
-                  <button class="btn-reset product__btn product__btn--close"></button>
-                </li>
-                <li class="product__right-item">
-                  <div class="product__presence product__presence--ordering">В наличии</div>
-                  <div class="product__residue">Много</div>
-                  <div class="product__calc product-calc">
-                    <button class="btn-reset product-calc__btn product-calc__btn--minus"></button>
-                    <div class="product-calc__value">
-                      146
-                      <span>14 блоков 6 шт</span>
-                    </div>
-                    <button class="btn-reset product-calc__btn product-calc__btn--plus"></button>
-                  </div>
-                  <div class="product__size">80 ₽</div>
-                  <div class="product__size-all product__size-all--ordering">4 720 ₽</div>
-                  <button class="btn-reset product__btn product__btn--close"></button>
-                </li>
-                <li class="product__right-item">
-                  <div class="product__presence product__presence--ordering">В наличии</div>
-                  <div class="product__residue">Много</div>
-                  <div class="product__calc product-calc">
-                    <button class="btn-reset product-calc__btn product-calc__btn--minus"></button>
-                    <div class="product-calc__value">
-                      146
-                      <span>14 блоков 6 шт</span>
-                    </div>
-                    <button class="btn-reset product-calc__btn product-calc__btn--plus"></button>
-                  </div>
-                  <div class="product__size">80 ₽</div>
-                  <div class="product__size-all product__size-all--ordering">4 720 ₽</div>
-                  <button class="btn-reset product__btn product__btn--close"></button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="ordering-item__bottom">
-          <div class="ordering-item__total">
-            Итого: 4 720 ₽
-          </div>
-        </div>
+      <div class="payment-form__bottom">
+        <button class="btn-reset form__btn btn payment-form__btn" @click="saveOrder()" data-btn-popup>Оформить заказ</button>
       </div>
-    </div>
+    </form>
   </div>
-  <!-- --- -->
-</div>
+</main>
 
-    <div class="popup-payment" data-main-popup>
+<div class="popup-payment" data-main-popup>
   <div class="graph-modal__container popup-payment__container" role="dialog" aria-modal="true">
     <button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"
       data-close-popup></button>
     <div class="graph-modal__content popup-payment__content">
       <div class="popup-payment__img">
-        <img loading="lazy" src="../img/popup-img.svg" class="image" width="64" height="64" alt="success">
+        <img loading="lazy" src="/static/main/img/popup-img.svg" class="image" width="64" height="64" alt="success">
       </div>
-      <h2 class="popup-payment__title">Заказ G11-3NSTBM оформлен</h2>
+      <h2 class="popup-payment__title">Заказ {* code *} оформлен</h2>
       <p class="popup-payment__descr">
         В ближайшее время с Вами свяжется менеджер для подтверждения заказа
       </p>
@@ -336,9 +78,3 @@
     </div>
   </div>
 </div>
-
-  </div>
-  <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
-</body>
-
-</html>

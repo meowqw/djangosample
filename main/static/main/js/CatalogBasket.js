@@ -2,7 +2,7 @@ new Vue({
     delimiters: ['{*', '*}'],
     el: '#app',
     data: {
-        arr: [], // впомогаьельный массив для рендера наличия товаров
+        // arr: [], // впомогаьельный массив для рендера наличия товаров
         name: null, // впомогаьельный элемент для рендера наличия товаров
         catTotal: 0,
         currentScreen: 'screenCatalog', // банеры - каталог
@@ -12,12 +12,29 @@ new Vue({
         categories: {},
         total: { 'total': 0, 'stock': 0, 'remote': 0, 'way': 0 },
 
-        // фильтр
+        // фильтр каталог
         weight: [],
         availability: [],
         status: [],
+        // данные для фильтрации каталога
+        catalogDataFilter: '',
+
+        // payment
+        code: null,
+        wayGet: 'DELIVERY', // способ получения
+        address: null, // точка доставки
+        paymentMethod: 'CASH', // способ оплаты
+        comment: null,
+
+        // фильтр account
+        orders: [],
+        filterAddress: [],
+        filterPaymentStatus: [],
+        to: null,
+        from: null,
 
         openedMainProduct: [],
+
     },
     methods: {
         // get request
@@ -36,7 +53,7 @@ new Vue({
         },
         // получить список продуктов по id основного товара
         getProductsByMainProduct: async function (id) {
-            products = await this.getData(`/api/v1/ProductsByMainProduct/?main_product=${id}`)
+            var products = await this.getData(`/api/v1/ProductsByMainProduct/?main_product=${id}`)
             for (var i in products) {
                 if (this.openedMainProduct.includes(id)) {
                     // pass
@@ -94,7 +111,6 @@ new Vue({
                     }
                 }
             }
-
             if (!this.openedMainProduct.includes(id)) {
                 // получить товары
                 this.getProductsByMainProduct(id);
@@ -105,35 +121,37 @@ new Vue({
 
         // переход с каталога на банеры
         switchScreen: function (screen) {
-
             // если пользвоатель ждем на одну и ту же ссылку - перенаправление на каталог
             if (screen == this.currentScreen) {
                 screen = 'screenCatalog';
             };
-
             goScreen = document.getElementById(screen).style.display = ''
             closeScreen = document.getElementById(this.currentScreen).style.display = 'none'
             this.currentScreen = screen;
 
         },
 
-        // переход с каталога на корзину
+        // переход корзины на каталог
         switchScreenMain: async function (screen) {
-
-            if (screen == "screenBasketMain") {
-                await this.goBasket();
-            }
-            
             if (screen != this.currentScreenMain) {
                 goScreen = document.getElementById(screen).style.display = ''
                 closeScreen = document.getElementById(this.currentScreenMain).style.display = 'none'
                 this.currentScreenMain = screen;
             }
-
-
-
         },
 
+        // переход с каталога на корзину
+        switchScreenBasket: async function (screen) {
+            if (screen == "screenBasketMain" && this.total.total != 0) {
+                await this.goBasket();
+
+                if (screen != this.currentScreenMain) {
+                    goScreen = document.getElementById(screen).style.display = ''
+                    closeScreen = document.getElementById(this.currentScreenMain).style.display = 'none'
+                    this.currentScreenMain = screen;
+                }
+            }
+        },
         // открыть/закрыть таб каталога (список продуктов)
         openTab: function (id) {
             tab = document.querySelectorAll(`[tab="${id}"]`);
@@ -234,6 +252,9 @@ new Vue({
             }
             // расчет тоталов
             this.totalCalculate()
+
+            // констроль состояния корзины
+            this.basketController();
         },
 
         // калькулятор -
@@ -276,6 +297,9 @@ new Vue({
             }
             // расчет тоталов
             this.totalCalculate()
+
+            // констроль состояния корзины
+            this.basketController();
 
         },
 
@@ -324,6 +348,9 @@ new Vue({
             }
             // расчет тоталов
             this.totalCalculate()
+
+            // констроль состояния корзины
+            this.basketController();
 
 
         },
@@ -396,8 +423,6 @@ new Vue({
             for (var i in basket) {
                 category = await this.getCategoryById(i)
                 this.categories[i] = { 'color': category[0].color, 'name': category[0].name, 'id': category[0].id }
-
-                basket[i]['total'] = 0
             }
 
             this.basket = basket
@@ -427,38 +452,262 @@ new Vue({
             return total
         },
 
-        // 
-        clearBasket: function() {
+        // очистка корзины
+        clearBasket: function () {
             this.basket = [];
-            this.catalog = []
+            this.catalog = [];
+            this.total = { 'total': 0, 'stock': 0, 'remote': 0, 'way': 0 };
+            // this.switchScreenMain('screenCatalogMain');
         },
 
-        createOrder: function() {
-
+        // создание ордера на заказ
+        createOrder: function () {
+            this.makeOrderCode();
+            this.switchToPayment('screenPaymentMain');
         },
+
+        // смена экрана на payment
+        switchToPayment: function (screen) {
+            goScreen = document.getElementById(screen).style.display = ''
+            closeScreen = document.getElementById(this.currentScreenMain).style.display = 'none'
+            this.currentScreenMain = screen;
+        },
+
+        // обработчик объектов в корзине (удаление)
+        basketController: function () {
+
+            newBasket = {}
+            for (var i in this.basket) {
+                category = this.basket[i] // основная категория
+                for (var j in category) {
+                    product = category[j]
+                    remote = product.remote.total
+                    way = product.way.total
+                    stock = product.stock.total
+                    if (remote == 0 && way == 0 && stock == 0) {
+                        delete this.basket[i][j] // удаляем продукт
+                        this.basket[i].length -= 1
+                    }
+
+                }
+                if (category.length == 0) {
+                    delete this.basket[i] // удаляем категорию
+                }
+            }
+        },
+
+        // удаление объекта из корзины
+        deleteProduct: function (id, availability) {
+            for (var i in this.catalog) {
+                list = this.catalog[i].id_product_list
+                for (var j in list) {
+                    product = list[j].id_product
+                    for (var k in product) {
+                        if (product[k].id == id) {
+                            if (availability in product[k]) {
+
+                                // count
+                                count = this.catalog[i].id_product_list[j].id_product[k][availability].count
+                                count = count = 0
+
+                                if (count >= 0) {
+                                    this.catalog[i].id_product_list[j].id_product[k][availability].count = count
+                                    // total
+                                    this.catalog[i].id_product_list[j].id_product[k][availability].total = product[k].price * count
+
+                                    // block
+                                    this.catalog[i].id_product_list[j].id_product[k][availability].block = count / list[j].carton | 0
+                                    block = this.catalog[i].id_product_list[j].id_product[k][availability].block
+
+                                    // remainder
+                                    this.catalog[i].id_product_list[j].id_product[k][availability].remainder = count - (block * list[j].carton)
+
+                                } else {
+                                    this.openCalc(id, availability)
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            // расчет тоталов
+            this.totalCalculate()
+
+            // констроль состояния корзины
+            this.basketController();
+        },
+
+        /* ----- */
 
         // ФИЛЬТР
-        FilterAvailability: function(availability) {
+        FilterAvailability: function (availability) {
             if (!this.availability.includes(availability)) {
                 this.availability.push(availability)
             } else {
                 this.availability = this.availability.filter(function (f) { return f !== availability });
             }
+
+            this.FilterCatalog()
         },
 
-        FilterWeight: function(weight) {
+        FilterWeight: function (weight) {
             if (!this.weight.includes(weight)) {
                 this.weight.push(weight)
             } else {
                 this.weight = this.weight.filter(function (f) { return f !== weight });
             }
+
+            this.FilterCatalog()
         },
 
         FilterStatus: function () {
+            this.FilterCatalog()
+        },
+
+        FilterCatalog: async function () {
+            availability = ''
+            if (this.availability.length > 0) {
+                availability = '&availability=' + this.availability.toString()
+            }
+
+            weight = ''
+            if (this.weight.length > 0) {
+                weight = '&weight=' + this.weight.toString()
+            }
+
+            Status = ''
+            if (this.status.length > 0) {
+                Status = '&status=' + this.status.toString()
+            }
+
+            data = (availability + weight + Status)
+
+            // await this.getOrders(data)
+            this.catalogDataFilter = data;
+            id = 1
+            await this.getData(`api/v1/ProductsByMainProductFilter/?main_product=${id}${data}`)
+
+        },
+        // --------
+
+        /* PAYMENT */
+
+        postData: async function (url, data) {
+            token = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+            const response = await fetch(url, {
+                headers: {
+                    "Content-type": "application/json",
+                    "X-CSRFTOKEN": token,
+                },
+                body: JSON.stringify(data),
+                method: "POST",
+            });
+
+            return response.json();
+        },
+
+        // генерирование номера заказа
+        makeOrderCode: function () {
+            date = new Date();
+            strDate = date.toString().split(' ')
+            code = strDate[0][0] + strDate[1][0] + '-' + strDate[2] + strDate[4].split(":")[0] + strDate[4].split(":")[1] + strDate[4].split(":")[2]
+            this.code = code;
+        },
+
+        // Указать выбранный адрес по дефолту
+        setAddress: function (address) {
+            this.address = address;
+        },
+
+        // оформить заказ
+        saveOrder: async function () {
+            data = {
+                'number': this.code,
+                'items': this.basket,
+                'address': this.address,
+                'comment': this.comment,
+                'total': this.total.total,
+                'payment_method': this.paymentMethod,
+                'way_get': this.wayGet
+            }
+
+            await this.postData('/api/v1/CreateOrder/', data);
+        },
+
+        /* CATALOG */
+
+        // FILTER
+        FilterAddress: function (address) {
+            if (!this.filterAddress.includes(address)) {
+                this.filterAddress.push(address)
+            } else {
+                this.filterAddress = this.filterAddress.filter(function (f) { return f !== address });
+            }
+
+            this.OrderFilter()
+        },
+
+        FilterPaymentStatus: function (paymentStatus) {
+            if (!this.filterPaymentStatus.includes(paymentStatus)) {
+                this.filterPaymentStatus.push(paymentStatus)
+            } else {
+                this.filterPaymentStatus = this.filterPaymentStatus.filter(function (f) { return f !== paymentStatus });
+            }
+
+            this.OrderFilter()
+        },
+
+        // получить заказы
+        getOrders: async function (data) {
+            orders = await this.getData(`/api/v1/Order?${data}`)
+            this.orders = orders;
+        },
+
+        // привести дату к нужному виду
+        processingDate: function (datetime) {
+            date = datetime.split('T')[0]
+            time = datetime.split('T')[1].split('.')[0]
+
+            return [date, time]
+        },
+
+        // фильтрация заказов
+        OrderFilter: async function () {
+            // дата 
+            date = ''
+            if (this.from != null && this.to != null) {
+
+                date = `&from=${this.from.year}-${this.from.month}-${this.from.day}&to=${this.to.year}-${this.to.month}-${this.to.day}`
+            }
+
+            // адреса
+            address = ''
+            if (this.filterAddress.length > 0) {
+                address = '&address=' + this.filterAddress.toString()
+            }
+
+            paymentStatus = ''
+            if (this.filterPaymentStatus.length > 0) {
+                paymentStatus = '&payment=' + this.filterPaymentStatus.toString()
+            }
+
+            data = (date + address + paymentStatus).substring(1)
+
+            await this.getOrders(data)
 
         }
+
+
     },
-    mounted() {
+    async mounted() {
+        // установка дефолтного адреса доставки
+        addressData = await this.getData('/api/v1/Address')
+        this.address = addressData[0].id
+
+        await this.getOrders('');
 
         // загрузка данных из локального хранилища
         // const catalog = localStorage.getItem('catalog');
@@ -471,7 +720,45 @@ new Vue({
         // if (total != undefined) {
         //     this.total = JSON.parse(total)
         // }
-        
+    },
+    // отслеживаем календарь
+    created() {
+        const onClickCalendar = e => {
+            item = e.target
+            className = e.target.classList
+            if (className.toString().includes('air-datepicker-cell')) {
+                if (className.toString().includes('-selected')) {
+                    if (className.toString().includes('-range-from')) {
+                        this.from = {
+                            'year': Number(item.getAttribute('data-year')),
+                            'month': Number(item.getAttribute('data-month')) + 1,
+                            'day': Number(item.getAttribute('data-date')),
+                        }
 
+                    } else if (className.toString().includes('-range-to')) {
+                        this.to = {
+                            'year': Number(item.getAttribute('data-year')),
+                            'month': Number(item.getAttribute('data-month')) + 1,
+                            'day': Number(item.getAttribute('data-date')),
+                        }
+                    }
+                } else if (!className.toString().includes('-selected')) {
+                    if (className.toString().includes('-range-from')) {
+                        this.from = null
+                    } else if (className.toString().includes('-range-to')) {
+                        this.to = null
+                    }
+                }
+
+                this.OrderFilter()
+            } else if (className.toString().includes('calendar__input')) {
+
+                // this.from = null
+                // this.to = null
+
+                // this.OrderFilter()
+            }
+        };
+        document.addEventListener('click', onClickCalendar);
     },
 })

@@ -32,3 +32,17 @@ class MainCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MainCategory
         fields = '__all__'
+        
+class DeliveryAddressesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryAddresses
+        fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    address = DeliveryAddressesSerializer()
+    
+    class Meta:
+        model = Order
+        fields = '__all__'
+        
+        

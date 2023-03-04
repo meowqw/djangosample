@@ -17,7 +17,7 @@
             </ul>
           </div>
           <div class="ordering-item__body">
-            <div class="product ordering-item__product" v-for="product in products">
+            <div class="product ordering-item__product" v-for="product in products" v-if="product != undefined">
               <div class="product__items product__items--ordering">
                 <div class="product__left">
                   <img v-bind:src="'/media/media/' + product.img.split('/media/media/')[1]" alt="product"
@@ -41,7 +41,7 @@
                     </div>
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.stock.total *} ₽</div>
-                    <button class="btn-reset product__btn product__btn--close"></button>
+                    <button class="btn-reset product__btn product__btn--close" @click="deleteProduct(product.id, 'stock')"></button>
                   </li>
 
                   <li class="product__right-item" v-if="product.way.total != 0">
@@ -60,7 +60,7 @@
                     </div>
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.way.total *} ₽</div>
-                    <button class="btn-reset product__btn product__btn--close"></button>
+                    <button class="btn-reset product__btn product__btn--close" @click="deleteProduct(product.id, 'way')"></button>
                   </li>
 
                   <li class="product__right-item" v-if="product.remote.total != 0">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.remote.total *} ₽</div>
-                    <button class="btn-reset product__btn product__btn--close"></button>
+                    <button class="btn-reset product__btn product__btn--close" @click="deleteProduct(product.id, 'remote')"></button>
 
                   </li>
                 </ul>
@@ -132,7 +132,7 @@
         </div>
         <div class="ordering-footer__item">
           <button class="btn-reset btn-red btn-red--clear" @click="clearBasket()">Очистить корзину</button>
-          <button class="btn-reset btn ordering-footer__btn">Далее</button>
+          <button class="btn-reset btn ordering-footer__btn" @click="createOrder()">Далее</button>
         </div>
       </div>
     </div>

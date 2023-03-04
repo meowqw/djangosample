@@ -133,10 +133,26 @@ class DeliveryAddresses(models.Model):
         verbose_name_plural = 'Адреса доставки'
         
         
-class UserOrder(models.Model):
+class Order(models.Model):
     "Orders that the user has confirmed"
-    PAYMENT_STATUS = ()
-    ORDER_STATUS = ()
+    PAYMENT_STATUS = (
+        ('PAID', 'Оплачен'),
+        ('NOTPAID', 'Не оплачен'),
+        ('PART', 'Частично'),
+    )
+    ORDER_STATUS = (
+        ('INPROCESSING', 'В обработке'),
+        ('SHIPMENT', 'В процессе отгрузки'),
+        ('DELIVERED', 'Доставлен'),
+    )
+    WAYGET = (
+        ('DELIVERY', 'Доставка'),
+        ('PICKUP', 'Савывоз'),
+    )
+    PAYMENT_METHOD = (
+        ('CASH', 'Наличными'),
+        ('CHECK', 'Расчетный счет'),
+    )
         
     
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
@@ -147,8 +163,8 @@ class UserOrder(models.Model):
     address = models.ForeignKey(DeliveryAddresses, on_delete=models.PROTECT, null=True)
     comment = models.TextField('Комментарий', null=True, blank=True)
     total = models.IntegerField('Цена', blank=True)
-    payment_method = models.CharField('Способ оплаты', max_length=300)
-    way_get = models.CharField('Способ получения', max_length=300)
+    payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD)
+    way_get = models.CharField(max_length=100, choices=WAYGET)
     debt = models.IntegerField('Задолжность (если есть)', null=True, blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
 

@@ -50,9 +50,9 @@ class AccountAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
     
-class UserOrderAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in UserOrder._meta.fields]
-    search_fields = list([field.name for field in UserOrder._meta.fields])
+class OrderAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Order._meta.fields]
+    search_fields = list([field.name for field in Order._meta.fields])
 
     filter_horizontal = ()
     list_filter = ()
@@ -74,6 +74,6 @@ admin.site.register(MainProduct, MainProductAdmin)
 admin.site.register(Banners, BannersAdmin)
 
 admin.site.register(Account, AccountAdmin)
-admin.site.register(UserOrder, UserOrderAdmin)
+admin.site.register(Order, OrderAdmin)
 admin.site.register(DeliveryAddresses, DeliveryAddressesAdmin)
 
