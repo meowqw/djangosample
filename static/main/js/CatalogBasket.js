@@ -53,7 +53,7 @@ new Vue({
         },
         // получить список продуктов по id основного товара
         getProductsByMainProduct: async function (id) {
-            var products = await this.getData(`/api/v1/ProductsByMainProduct/?main_product=${id}`)
+            var products = await this.getData(`/api/v1/ProductsByMainProductFilter/?main_product=${id}${this.catalogDataFilter}`)
             for (var i in products) {
                 if (this.openedMainProduct.includes(id)) {
                     // pass
@@ -178,7 +178,7 @@ new Vue({
             triaglePanel = document.querySelectorAll(`[triaglePanel="${id}"]`);
 
 
-            console.log(panel[0].style.display)
+            // console.log(panel[0].style.display)
             if (panel[0].style.display == 'none') {
                 panelBtn[0].classList.add('ui-accordion-header-active');
                 panel[0].style.display = 'block'
@@ -586,9 +586,35 @@ new Vue({
 
             // await this.getOrders(data)
             this.catalogDataFilter = data;
-            id = 1
-            await this.getData(`api/v1/ProductsByMainProductFilter/?main_product=${id}${data}`)
 
+            // запуск ререндера
+            await this.renderCatalogFilter();
+            
+        },
+
+        // ререндкр каталога после фильтрации
+        renderCatalogFilter: async function() {
+
+            data = this.catalogDataFilter;
+            openedIds = this.openedMainProduct
+            this.catalog = []; // очистка каталога
+            this.openedMainProduct = []  // очситка открытх продуктов
+            this.total = { 'total': 0, 'stock': 0, 'remote': 0, 'way': 0 }
+            
+            // берем открытые id и отправляем в фильтр
+            for (var i in openedIds) {
+                id = openedIds[i]
+                var products = await this.getData(`api/v1/ProductsByMainProductFilter/?main_product=${id}${data}`)
+
+                for (var idProduct in products) {
+                    if (this.openedMainProduct.includes(id)) {
+                        // pass
+                    } else {
+                        this.catalog.push(products[idProduct])
+                        this.openedMainProduct.push(id)
+                    }
+                }
+            }
         },
         // --------
 
@@ -635,6 +661,9 @@ new Vue({
             }
 
             await this.postData('/api/v1/CreateOrder/', data);
+
+            // обвить список заказов
+            await this.getOrders('');
         },
 
         /* CATALOG */
@@ -705,7 +734,7 @@ new Vue({
     async mounted() {
         // установка дефолтного адреса доставки
         addressData = await this.getData('/api/v1/Address')
-        this.address = addressData[0].id
+        this.address = Number(addressData[0].id)
 
         await this.getOrders('');
 

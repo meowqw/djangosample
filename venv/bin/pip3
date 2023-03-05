@@ -1,4 +1,4 @@
-#!/Users/neetqw/python/djangosample/venv/bin/python3
+#!/home/oleg/python/tobacco2/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

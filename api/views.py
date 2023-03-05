@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -132,9 +131,6 @@ class ProductsByMainProductFilterView(APIView):
 
 
 
-
-
-
 class CreateOrderAPIVIew(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -143,8 +139,8 @@ class CreateOrderAPIVIew(APIView):
         data['debt'] = 0
         data['payment_status'] = 'NOTPAID'
         data['order_status'] = 'INPROCESSING'
-
-        serializer = OrderSerializer(data=data)
+        
+        serializer = OrderPOSTSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
 
