@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework.authentication import TokenAuthentication
@@ -118,16 +119,35 @@ class ProductsByMainProductFilterView(APIView):
             # Filter out stock, way, remote based on filtered availability
             for mp in json_data:
                 for id_plist in mp.get('id_product_list', []):
+                    id_product_filtered = []
                     for id_product in id_plist.get('id_product', []):
+                        all_availability_zero = True  # flag to keep track of availability
                         for k in list(id_product.keys()):
                             if k in ('stock', 'way', 'remote') and k not in availability:
-                                id_product[k]['availability'] = 0 
+                                id_product[k]['availability'] = 0
+                            # Check if all availability fields are 0
+                            if k in ('stock', 'way', 'remote') and id_product[k]['availability'] != 0:
+                                all_availability_zero = False
+                        if not all_availability_zero:
+                            id_product_filtered.append(id_product)
+                    id_plist['id_product'] = id_product_filtered
+                    # Remove id_product_list if it is empty
+                    if not id_plist['id_product']:
+                        mp['id_product_list'].remove(id_plist)
 
+        
+        for mp in json_data:
+            mp['id_product_list'] = [id_plist for id_plist in mp['id_product_list'] if id_plist['id_product']]
+            
+        json_data = [mp for mp in json_data if mp['id_product_list']]
 
 
         return JsonResponse(json_data, safe=False)
 
     serializer_class = MainCategorySerializer
+
+
+
 
 
 
@@ -139,8 +159,8 @@ class CreateOrderAPIVIew(APIView):
         data['debt'] = 0
         data['payment_status'] = 'NOTPAID'
         data['order_status'] = 'INPROCESSING'
-        
-        serializer = OrderPOSTSerializer(data=data)
+
+        serializer = OrderSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
 
