@@ -13,6 +13,8 @@ urlpatterns = [
    path('ProductsByMainProductFilter/', ProductsByMainProductFilterView.as_view()),
    path('CreateOrder/', CreateOrderAPIVIew.as_view()),
    path('Order/', OrderAPIView.as_view({'get': 'list'})),
+   path('OrderById/<int:order_id>', OrderByIdAPIView.as_view({'get': 'list'})),
+   
    
    path('Address/', AddressAPIVIew.as_view({'get': 'list'})),
    

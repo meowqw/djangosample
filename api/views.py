@@ -147,10 +147,6 @@ class ProductsByMainProductFilterView(APIView):
     serializer_class = MainCategorySerializer
 
 
-
-
-
-
 class CreateOrderAPIVIew(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -200,6 +196,15 @@ class OrderAPIView(viewsets.ReadOnlyModelViewSet):
             date_from = datetime.strptime(self.request.GET['from'], '%Y-%m-%d')
             date_to = datetime.strptime(self.request.GET['to'], '%Y-%m-%d')
             order = order.filter(time_create__range=(date_from, date_to))
+
+        return order
+
+    serializer_class = OrderSerializer
+    
+    
+class OrderByIdAPIView(viewsets.ReadOnlyModelViewSet):
+    def get_queryset(self):
+        order = Order.objects.filter(id=self.kwargs['order_id'])
 
         return order
 

@@ -11,8 +11,8 @@
                     {% for category in categories %}
                     {% if category.name == 'Aкксессуары для кальяна'%}
                     {% for main_product in category.id_main_product %}
-                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                        color="{{category.color}}" type="mainProductCatalog"
+                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                        class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
 
                         <span>
@@ -34,8 +34,8 @@
                         {% for category in categories %}
                         {% if category.name == 'Кальяны' %}
                         {% for main_product in category.id_main_product.all %}
-                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                            color="{{category.color}}" type="mainProductCatalog"
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                            class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
 
                             <span>
@@ -56,8 +56,8 @@
                         {% for category in categories %}
                         {% if category.name == 'Лимонады' %}
                         {% for main_product in category.id_main_product.all %}
-                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                            color="{{category.color}}" type="mainProductCatalog"
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                            class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
                             <span>
                                 <svg class="menu__link-icon">
@@ -79,8 +79,8 @@
                         {% for category in categories %}
                         {% if category.name == 'Мерч' %}
                         {% for main_product in category.id_main_product.all %}
-                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                            color="{{category.color}}" type="mainProductCatalog"
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                            class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}</button>
 
 
@@ -100,8 +100,8 @@
                     {% for category in categories %}
                     {% if category.name == 'Табак для кальяна' %}
                     {% for main_product in category.id_main_product.all %}
-                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                        color="{{category.color}}" type="mainProductCatalog"
+                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                        class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
 
                         <span>
@@ -124,8 +124,8 @@
                         {% for category in categories %}
                         {% if category.name == 'Уголь' %}
                         {% for main_product in category.id_main_product.all %}
-                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                            color="{{category.color}}" type="mainProductCatalog"
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                            class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
                             <span>
                                 <svg class="menu__link-icon">
@@ -147,8 +147,8 @@
                         {% for category in categories %}
                         {% if category.name == 'Pod-системы' %}
                         {% for main_product in category.id_main_product.all %}
-                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                            color="{{category.color}}" type="mainProductCatalog"
+                        <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                            class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
                             <span>
                                 <svg class="menu__link-icon">
@@ -171,8 +171,8 @@
                     {% for category in categories %}
                     {% if category.name == 'Жидкости' %}
                     {% for main_product in category.id_main_product.all %}
-                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" class="btn-reset menu__link"
-                        color="{{category.color}}" type="mainProductCatalog"
+                    <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
+                        class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
 
 
@@ -191,5 +191,62 @@
                     {% endfor %}
                 </li>
             </ul>
+        </div>
+    </div>
+
+    <div class="graph-modal__container graph-modal__container--light" role="dialog" aria-modal="true"
+        data-graph-target="orderInfo">
+        <button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно"></button>
+        <div class="graph-modal__content ordering__content" v-if="order != null">
+            <h1 class="ordering__title" style="margin-top: 2px;">{* orderNumber *}</h1>
+            <div v-for="(products, cat) in order"
+          :class="'ordering__item ordering-item ordering-item--'+orderCategories[cat].color">
+          <div class="ordering-item__head">
+            <h2 class="ordering-item__title"v-if='orderCategories.length != 0'>{* orderCategories[cat].name *}</h2>
+            <ul class="list-reset ordering-item__head-list">
+              <div class="ordering-item__head-item">Цена шт.</div>
+              <div class="ordering-item__head-item">Цена итого</div>
+            </ul>
+          </div>
+          <div class="ordering-item__body">
+            <div class="product ordering-item__product" v-for="product in products" v-if="product != undefined">
+              <div class="product__items product__items--ordering">
+                <div class="product__left">
+                  <img v-bind:src="'/media/media/' + product.img.split('/media/media/')[1]" alt="product"
+                    class="image product__img">
+                  <h3 class="product__title">{* product.name *}</h3>
+                </div>
+                <ul class="list-reset product__right-list">
+                  <li class="product__right-item" v-if="product.stock.total != 0">
+                    <div class="product__presence product__presence--ordering product__presence--not-arrow">{* product.stock.name *}</div>
+                    
+                    <div class="product__size">{* product.price *} ₽</div>
+                    <div class="product__size-all product__size-all--ordering">{* product.stock.total *} ₽</div>
+                  </li>
+
+                  <li class="product__right-item" v-if="product.way.total != 0">
+                    <div class="product__presence product__presence--blue product__presence--not-arrow">{* product.way.name *}</div>
+                    
+                    <div class="product__size">{* product.price *} ₽</div>
+                    <div class="product__size-all product__size-all--ordering">{* product.way.total *} ₽</div>
+                  </li>
+
+                  <li class="product__right-item" v-if="product.remote.total != 0">
+                    <div class="product__presence product__presence--orange product__presence--not-arrow">{* product.remote.name *}</div>
+                    <div class="product__size">{* product.price *} ₽</div>
+                    <div class="product__size-all product__size-all--ordering">{* product.remote.total *} ₽</div>
+
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+          <div class="ordering-item__bottom">
+            <div class="ordering-item__total">
+              Итого: {* calcTotalCategory(products) *} ₽
+            </div>
+          </div>
+        </div>
         </div>
     </div>

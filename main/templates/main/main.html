@@ -167,7 +167,7 @@
                     <span :triagleTab="item.id" class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
 
                     {* item.name *}</button>
-                  <div class="main-body__panel" :tab="item.id" style="display:none">
+                  <div class="main-body__panel" :tab="item.id" style="display:none;">
                     <ul class="list-reset main-body__sublist accordion accordion-child">
                       <li class="main-body__subitem accordion-item" v-for="list in item.id_product_list">
                         <button :panelBtn="list.id" style="margin-bottom: 8px;" v-on:click="openPanel(list.id)"
