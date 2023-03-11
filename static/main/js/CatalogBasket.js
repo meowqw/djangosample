@@ -8,6 +8,7 @@ new Vue({
         currentScreen: "screenCatalog", // банеры - каталог
         currentScreenMain: "screenCatalogMain", // каталог - корзина
         catalog: [],
+        products: {}, // список продуктов, выбранных пользователем
         basket: [],
         categories: {},
         total: { total: 0, stock: 0, remote: 0, way: 0 },
@@ -78,7 +79,18 @@ new Vue({
 
             for (var i in this.catalog) {
                 if (this.catalog[i].id == id) {
+                    
+
+                    // удаляем продукт из this.products
+                    if (this.catalog[i].id in this.products) {
+                        delete this.products[this.catalog[i].id]
+                    }
+
+
                     this.catalog.splice(i, 1);
+
+
+                    
                 }
             }
 
@@ -197,7 +209,7 @@ new Vue({
         },
 
         // калькулятор +
-        calcPlus: function (id, availability) {
+        calcPlus: async function (id, availability) {
             for (var i in this.catalog) {
                 list = this.catalog[i].id_product_list;
                 for (var j in list) {
@@ -237,19 +249,31 @@ new Vue({
                                     availability
                                 ].remainder = count - block * list[j].carton;
                             }
+
+                            product[k]['carton'] = list[j].carton;
+                            if (this.catalog[i].id in this.products) {
+                                this.products[this.catalog[i].id][product[k].id] = product[k]
+                            } else {
+                                this.products[this.catalog[i].id] = {[product[k].id]: product[k]}
+                            }
                         }
                     }
                 }
             }
+
+
+
             // расчет тоталов
             this.totalCalculate();
 
             // констроль состояния корзины
             this.basketController();
+
+            // await this.goBasket();
         },
 
         // калькулятор -
-        calcMinus: function (id, availability) {
+        calcMinus: async function (id, availability) {
             for (var i in this.catalog) {
                 list = this.catalog[i].id_product_list;
                 for (var j in list) {
@@ -291,6 +315,13 @@ new Vue({
                                     break;
                                 }
                             }
+
+                            product[k]['carton'] = list[j].carton;
+                            if (this.catalog[i].id in this.products) {
+                                this.products[this.catalog[i].id][product[k].id] = product[k]
+                            } else {
+                                this.products[this.catalog[i].id] = {[product[k].id]: product[k]}
+                            }
                         }
                     }
                 }
@@ -300,9 +331,11 @@ new Vue({
 
             // констроль состояния корзины
             this.basketController();
+
+            // await this.goBasket();
         },
 
-        calcInput: function (id, availability) {
+        calcInput: async function (id, availability) {
             calcInput = document.querySelectorAll(
                 `[calcInput="${id}"][availability="${availability}"]`
             );
@@ -353,6 +386,13 @@ new Vue({
                                     break;
                                 }
                             }
+
+                            product[k]['carton'] = list[j].carton;
+                            if (this.catalog[i].id in this.products) {
+                                this.products[this.catalog[i].id][product[k].id] = product[k]
+                            } else {
+                                this.products[this.catalog[i].id] = {[product[k].id]: product[k]}
+                            }
                         }
                     }
                 }
@@ -362,10 +402,13 @@ new Vue({
 
             // констроль состояния корзины
             this.basketController();
+
+            // await this.goBasket();
+            
         },
 
         // расчет тоталов
-        totalCalculate: function () {
+        totalCalculate: async function () {
             stockRes = 0;
             remoteRes = 0;
             wayRes = 0;
@@ -393,6 +436,10 @@ new Vue({
 
             localStorage.setItem("catalog", JSON.stringify(this.catalog));
             localStorage.setItem("total", JSON.stringify(this.total));
+
+            console.log(this.products)
+
+            
         },
 
         // получаем категорию товара
@@ -404,26 +451,22 @@ new Vue({
         // сортируем по категориям товары из каталога
         goBasket: async function () {
             basket = {};
-            for (var i in this.catalog) {
-                productList = this.catalog[i].id_product_list;
-                for (var l in productList) {
-                    carton = productList[l].carton;
-                    for (var j in productList[l].id_product) {
-                        product = productList[l].id_product[j];
-                        product["carton"] = carton;
+            
+            for (var i in this.products) {
+                for (var j in this.products[i]) {
+                    product = this.products[i][j];
 
-                        if (
-                            product.remote.total != 0 ||
-                            product.way.total != 0 ||
-                            product.stock.total != 0
-                        ) {
-                            category = await this.getCategoryByProduct(product.id);
+                    if (
+                        product.remote.total != 0 ||
+                        product.way.total != 0 ||
+                        product.stock.total != 0
+                    ) {
+                        category = await this.getCategoryByProduct(product.id);
 
-                            if (category[0].id in basket) {
-                                basket[category[0].id].push(product);
-                            } else {
-                                basket[category[0].id] = [product];
-                            }
+                        if (category[0].id in basket) {
+                            basket[category[0].id].push(product);
+                        } else {
+                            basket[category[0].id] = [product];
                         }
                     }
                 }
@@ -469,6 +512,7 @@ new Vue({
         // переход с каталога на корзину
         switchScreenBasket: async function (screen) {
             if (screen == "screenBasketMain" && this.total.total != 0) {
+
                 await this.goBasket();
 
                 if (screen != this.currentScreenMain) {
@@ -654,48 +698,61 @@ new Vue({
             // запуск ререндера
             await this.renderCatalogFilter();
         },
+        
 
+        // Рендер продуктов полсе фильтрации отнссительно их наличия в products
+        catalogProcessingAfterFilter: async function (newCatalog) {
 
-        // обработка содержимого каталога до ререндера
-        catalogProcessingBeforeFilter: function() {
-            // console.log(newCatalog);
-            id_products = []
+            for (var i in this.products) {
+                for (var d in this.products[i]) {
+                    product = this.products[i][d]
 
-            for (var i in this.catalog) {
-                mainProduct = this.catalog[i]
-                for (var j in mainProduct.id_product_list) {
-                    productList = mainProduct.id_product_list[j]
-                    for (var k in productList.id_product) {
-                        idProduct = productList.id_product[k]
-                        stock = idProduct.stock.total
-                        remote = idProduct.remote.total
-                        way = idProduct.way.total
+                    for (var s in newCatalog) {
+                        mainProduct = newCatalog[s]
+                        for (var j in mainProduct.id_product_list) {
+                            productList = mainProduct.id_product_list[j]
+                            for (var k in productList.id_product) {
+                                idProduct = productList.id_product[k]
+                                if (idProduct.id == product.id) {
+                                    // idProduct = product
 
-                        if (stock > 0 || remote > 0 || way > 0) {
-                            id_products.push(idProduct.id)
+                                    // STOCK
+                                    newCatalog[s].id_product_list[j].id_product[k].stock.total = product.stock.total
+                                    newCatalog[s].id_product_list[j].id_product[k].stock.count = product.stock.count
+                                    newCatalog[s].id_product_list[j].id_product[k].stock.remainder = product.stock.remainder
+                                    newCatalog[s].id_product_list[j].id_product[k].stock.block = product.stock.block
+
+                                    // WAY
+                                    newCatalog[s].id_product_list[j].id_product[k].way.total = product.way.total
+                                    newCatalog[s].id_product_list[j].id_product[k].way.count = product.way.count
+                                    newCatalog[s].id_product_list[j].id_product[k].way.remainder = product.way.remainder
+                                    newCatalog[s].id_product_list[j].id_product[k].way.block = product.way.block
+
+                                    // REMOTE
+                                    newCatalog[s].id_product_list[j].id_product[k].remote.total = product.remote.total
+                                    newCatalog[s].id_product_list[j].id_product[k].remote.count = product.remote.count
+                                    newCatalog[s].id_product_list[j].id_product[k].remote.remainder = product.remote.remainder
+                                    newCatalog[s].id_product_list[j].id_product[k].remote.block = product.remote.block
+                                    
+                                }
+                            }
                         }
                     }
+
                 }
             }
-            return id_products
-        },
 
-        catalogProcessingAfterFilter: function(newCatalog, id_products) {
             this.catalog = newCatalog;
         },
-        
-        
+
+
         // ререндкр каталога после фильтрации
         renderCatalogFilter: async function () {
-            
-            id_products = this.catalogProcessingBeforeFilter();
-            // data = this.catalogDataFilter;
-            openedIds = this.openedMainProduct;
-            // this.catalog = []; // очистка каталога
-            // // this.openedMainProduct = []  // очситка открытх продуктов
-            // this.total = { total: 0, stock: 0, remote: 0, way: 0 };
 
+            data = this.catalogDataFilter;
+            openedIds = this.openedMainProduct;
             newCatalog = [];
+
             // берем открытые id и отправляем в фильтр
             for (var i in openedIds) {
                 id = openedIds[i];
@@ -707,9 +764,9 @@ new Vue({
                     newCatalog.push(products[idProduct]);
                 }
             }
-            
-            this.catalogProcessingAfterFilter(newCatalog, id_products);
-            
+
+            await this.catalogProcessingAfterFilter(newCatalog);
+
         },
         // --------
 
@@ -834,10 +891,10 @@ new Vue({
 
             await this.getOrders(data);
         },
-
-        getOrderInfo: async function(id) {
+        // получить ифнормацию о товаре
+        getOrderInfo: async function (id) {
             orderInfo = await this.getData(`/api/v1/OrderById/${id}`);
-            order =  orderInfo[0].items;
+            order = orderInfo[0].items;
 
             for (var i in order) {
                 category = await this.getCategoryById(i);
@@ -850,8 +907,6 @@ new Vue({
 
             this.orderNumber = orderInfo[0].number
             this.order = order;
-            
-            
         },
     },
     async mounted() {
