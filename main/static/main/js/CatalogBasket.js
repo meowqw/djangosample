@@ -793,7 +793,11 @@ new Vue({
 
           count = this.products[j][id][availability].count;
 
-          count = Number(calcInput[1].value);
+          if (calcInput.length == 2) {
+            count = Number(calcInput[1].value);
+          } else {
+            count = Number(calcInput[0].value);
+          }
 
           this.products[j][id][availability].count = count;
 
