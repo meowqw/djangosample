@@ -156,7 +156,7 @@ class CreateOrderAPIVIew(APIView):
         data['payment_status'] = 'NOTPAID'
         data['order_status'] = 'INPROCESSING'
 
-        serializer = OrderSerializer(data=data)
+        serializer = OrderPOSTSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
 
@@ -164,7 +164,7 @@ class CreateOrderAPIVIew(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    serializer_class = OrderSerializer
+    serializer_class = OrderPOSTSerializer
     permission_classes = (IsAuthenticated,)  # only auth user
 
 

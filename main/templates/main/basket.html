@@ -30,14 +30,14 @@
                     <div class="product__residue">{*product.stock.availability*}</div>
                     <div class="product__calc product-calc">
                       <button class="btn-reset product-calc__btn product-calc__btn--minus"
-                        v-on:click="calcMinus(product.id, 'stock')"></button>
+                        v-on:click="calcMinusBusket(product.id, 'stock')"></button>
                       <div class="product-calc__value">
                         <input type="number" class="input input--calc" :value="product.stock.count"
-                          :calcInput="product.id" availability="stock" v-on:input="calcInput(product.id, 'stock')">
+                          :calcInput="product.id" availability="stock" v-on:input="calcInputBusket(product.id, 'stock')">
                         <span>{* product.stock.block *} блоков {* product.stock.remainder *} шт</span>
                       </div>
                       <button class="btn-reset product-calc__btn product-calc__btn--plus"
-                        v-on:click="calcPlus(product.id, 'stock')"></button>
+                        v-on:click="calcPlusBusket(product.id, 'stock')"></button>
                     </div>
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.stock.total *} ₽</div>
@@ -49,14 +49,14 @@
                     <div class="product__residue">{*product.way.availability*}</div>
                     <div class="product__calc product-calc">
                       <button class="btn-reset product-calc__btn product-calc__btn--minus"
-                        v-on:click="calcMinus(product.id, 'way')"></button>
+                        v-on:click="calcMinusBusket(product.id, 'way')"></button>
                       <div class="product-calc__value">
                         <input type="number" class="input input--calc" :value="product.way.count"
-                          :calcInput="product.id" availability="way" v-on:input="calcInput(product.id, 'way')">
+                          :calcInput="product.id" availability="way" v-on:input="calcInputBusket(product.id, 'way')">
                         <span>{* product.way.block *} блоков {* product.way.remainder *} шт</span>
                       </div>
                       <button class="btn-reset product-calc__btn product-calc__btn--plus"
-                        v-on:click="calcPlus(product.id, 'way')"></button>
+                        v-on:click="calcPlusBusket(product.id, 'way')"></button>
                     </div>
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.way.total *} ₽</div>
@@ -68,14 +68,14 @@
                     <div class="product__residue">{*product.remote.availability*}</div>
                     <div class="product__calc product-calc">
                       <button class="btn-reset product-calc__btn product-calc__btn--minus"
-                        v-on:click="calcMinus(product.id, 'remote')"></button>
+                        v-on:click="calcMinusBusket(product.id, 'remote')"></button>
                       <div class="product-calc__value">
                         <input type="number" class="input input--calc" :value="product.remote.count"
-                          :calcInput="product.id" availability="remote" v-on:input="calcInput(product.id, 'remote')">
+                          :calcInput="product.id" availability="remote" v-on:input="calcInputBusket(product.id, 'remote')">
                         <span>{* product.remote.block *} блоков {* product.remote.remainder *} шт</span>
                       </div>
                       <button class="btn-reset product-calc__btn product-calc__btn--plus"
-                        v-on:click="calcPlus(product.id, 'remote')"></button>
+                        v-on:click="calcPlusBusket(product.id, 'remote')"></button>
                     </div>
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.remote.total *} ₽</div>
