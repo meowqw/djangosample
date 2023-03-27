@@ -2202,7 +2202,8 @@
         var t = s(545);
         new(s.n(t)())("#input", {
             range: !0,
-            multipleDatesSeparator: " - "
+            multipleDatesSeparator: " - ",
+            buttons: ['clear']
         }), s(306), s(595), s(452), s(91), s(115), s(339), new e
     })()
 })();

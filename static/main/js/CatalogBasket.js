@@ -126,22 +126,24 @@ new Vue({
 
             btn.className = `btn-reset sidebar__btn sidebar__btn--sub sidebar__btn--active sidebar__btn--active-${color}`;
             btnCat.className = `btn-reset menu__link menu__link--active menu__link--active-${color}`;
-            btnCat.setAttribute('aria-expanded', 'true');
-            btnCat.setAttribute('aria-selected', 'true');
+            
 
 
             // подсветка категории
             catBtn.className =
-              "btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active";
+              `btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--${color} ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active`;
 
-
-
+            catBtn.getElementsByTagName('span')[0].className = 'ui-accordion-header-icon ui-icon ui-icon-triangle-1-s'
+            catBtn.setAttribute('aria-expanded', 'true');
+            catBtn.setAttribute('aria-selected', 'true');
+            
             // показываем кнопку
             closeBtn.style.display = "";
           } else {
+            catBtn.setAttribute('aria-expanded', 'false');
+            catBtn.setAttribute('aria-selected', 'false');
+
             btnCat.className = `btn-reset menu__link`;
-            btnCat.setAttribute('aria-expanded', 'false');
-            btnCat.setAttribute('aria-selected', 'false');
             btn.className = `btn-reset sidebar__btn sidebar__btn--sub`;
             // скрываем кнопку
             closeBtn.style.display = "none";
@@ -1269,6 +1271,7 @@ new Vue({
     const onClickCalendar = (e) => {
       item = e.target;
       className = e.target.classList;
+      // console.log(className)
       if (className.toString().includes("air-datepicker-cell")) {
         if (className.toString().includes("-selected")) {
           if (className.toString().includes("-range-from")) {
@@ -1293,7 +1296,7 @@ new Vue({
         }
 
         this.OrderFilter();
-      } else if (className.toString().includes("calendar__input")) {
+      } else if (className.value.length == 0) {
         this.from = null
         this.to = null
         this.OrderFilter()
@@ -1323,3 +1326,14 @@ new Vue({
     }
   }
 });
+
+
+// document.getElementById('button-clear').onclick = function (e) {
+//   document.getElementById('input').value = "";
+// };
+
+// document.getElementById('button-clear').onclick = function (e) {
+//   document.getElementById('input').value = ""
+//   document.getElementById('input').setAttribute('from', "none")
+//   document.getElementById('input').setAttribute('to', "none")
+// }
