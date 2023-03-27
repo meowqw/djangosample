@@ -2,7 +2,10 @@
 
 <div class="graph-modal">
     <div class="graph-modal__container" role="dialog" aria-modal="true" data-graph-target="menu">
-        <button class="btn-reset js-modal-close graph-modal__close" aria-label="Закрыть модальное окно">x</button>
+        <button
+            class="btn-reset js-modal-close graph-modal__close graph-modal__close--white"
+            aria-label="Закрыть модальное окно"
+          ></button>
         <div class="graph-modal__content menu">
             <ul class="list-reset menu__list">
                 <li class="menu__item menu__item--green">
@@ -15,7 +18,7 @@
                         class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
 
-                        <span>
+                        <span id="{{main_product.id}}" element="close" style="display: none">
                             <svg class="menu__link-icon">
                                 <use xlink:href="/static/main/img/sprite.svg#close"></use>
                             </svg>
@@ -38,7 +41,7 @@
                             class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
 
-                            <span>
+                            <span id="{{main_product.id}}" element="close" style="display: none">
                                 <svg class="menu__link-icon">
                                     <use xlink:href="/static/main/img/sprite.svg#close"></use>
                                 </svg>
@@ -59,7 +62,7 @@
                         <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
                             class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
-                            <span>
+                            <span id="{{main_product.id}}" element="close" style="display: none">
                                 <svg class="menu__link-icon">
                                     <use xlink:href="/static/main/img/sprite.svg#close"></use>
                                 </svg>
@@ -84,7 +87,7 @@
                             id="{{main_product.id}}">{{main_product.name}}</button>
 
 
-                        <span>
+                        <span id="{{main_product.id}}" element="close" style="display: none">
                             <svg class="menu__link-icon">
                                 <use xlink:href="/static/main/img/sprite.svg#close"></use>
                             </svg>
@@ -103,8 +106,8 @@
                     <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
                         class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
-
-                        <span>
+                        
+                        <span id="{{main_product.id}}" element="close" style="display: none">
                             <svg class="menu__link-icon">
                                 <use xlink:href="/static/main/img/sprite.svg#close"></use>
                             </svg>
@@ -127,7 +130,7 @@
                         <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
                             class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
-                            <span>
+                            <span id="{{main_product.id}}" element="close" style="display: none">
                                 <svg class="menu__link-icon">
                                     <use xlink:href="/static/main/img/sprite.svg#close"></use>
                                 </svg>
@@ -150,7 +153,7 @@
                         <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
                             class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                             id="{{main_product.id}}">{{main_product.name}}
-                            <span>
+                            <span id="{{main_product.id}}" element="close" style="display: none">
                                 <svg class="menu__link-icon">
                                     <use xlink:href="/static/main/img/sprite.svg#close"></use>
                                 </svg>
@@ -176,7 +179,7 @@
                         id="{{main_product.id}}">{{main_product.name}}
 
 
-                        <span>
+                        <span id="{{main_product.id}}" element="close" style="display: none">
                             <svg class="menu__link-icon">
                                 <use xlink:href="/static/main/img/sprite.svg#close"></use>
                             </svg>

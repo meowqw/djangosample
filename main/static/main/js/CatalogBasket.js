@@ -38,6 +38,7 @@ new Vue({
     orderNumber: null,
 
     openedMainProduct: [],
+    openedProduct: [],
   },
   methods: {
     // get request
@@ -70,6 +71,15 @@ new Vue({
           this.openedMainProduct.push(id);
         }
       }
+
+      newCatalog = [];
+      for (var idProduct in this.catalog) {
+        newCatalog.push(this.catalog[idProduct]);
+      }
+
+      await this.catalogProcessingAfterFilter(newCatalog);
+
+      await this.openCalcSelectedProducts();
     },
 
     // удалить данные из каталога
@@ -80,9 +90,9 @@ new Vue({
       for (var i in this.catalog) {
         if (this.catalog[i].id == id) {
           // удаляем продукт из this.products
-          if (this.catalog[i].id in this.products) {
-            delete this.products[this.catalog[i].id];
-          }
+          // if (this.catalog[i].id in this.products) {
+          //   delete this.products[this.catalog[i].id];
+          // }
 
           this.catalog.splice(i, 1);
         }
@@ -103,22 +113,38 @@ new Vue({
       // кнопка категории
       catBtn = document.querySelectorAll(`[category="${catId}"]`)[0];
 
+      // кнопки закрыть
+      closeBtns = document.querySelectorAll(`[element="close"]`);
+
       for (var i in btns) {
         btn = btns[i];
         btnCat = btnsCatalog[i];
+        closeBtn = closeBtns[i];
         if (btn.id == id) {
           if (!this.openedMainProduct.includes(id)) {
             color = btn.getAttribute("color");
 
             btn.className = `btn-reset sidebar__btn sidebar__btn--sub sidebar__btn--active sidebar__btn--active-${color}`;
             btnCat.className = `btn-reset menu__link menu__link--active menu__link--active-${color}`;
+            btnCat.setAttribute('aria-expanded', 'true');
+            btnCat.setAttribute('aria-selected', 'true');
+
 
             // подсветка категории
             catBtn.className =
               "btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active";
+
+
+
+            // показываем кнопку
+            closeBtn.style.display = "";
           } else {
             btnCat.className = `btn-reset menu__link`;
+            btnCat.setAttribute('aria-expanded', 'false');
+            btnCat.setAttribute('aria-selected', 'false');
             btn.className = `btn-reset sidebar__btn sidebar__btn--sub`;
+            // скрываем кнопку
+            closeBtn.style.display = "none";
           }
         }
       }
@@ -211,46 +237,56 @@ new Vue({
           for (var k in product) {
             if (product[k].id == id) {
               if (availability in product[k]) {
-                // count
-                this.catalog[i].id_product_list[j].id_product[k][
-                  availability
-                ].count += 1;
-                count =
+                if (
                   this.catalog[i].id_product_list[j].id_product[k][availability]
-                    .count;
-
-                // total
-                this.catalog[i].id_product_list[j].id_product[k][
-                  availability
-                ].total = product[k].price * count;
-
-                total =
+                    .count <
                   this.catalog[i].id_product_list[j].id_product[k][availability]
-                    .total;
+                    .availability
+                ) {
+                  // count
+                  this.catalog[i].id_product_list[j].id_product[k][
+                    availability
+                  ].count += 1;
+                  count =
+                    this.catalog[i].id_product_list[j].id_product[k][
+                      availability
+                    ].count;
 
-                // block
+                  // total
+                  this.catalog[i].id_product_list[j].id_product[k][
+                    availability
+                  ].total = product[k].price * count;
 
-                this.catalog[i].id_product_list[j].id_product[k][
-                  availability
-                ].block = (count / list[j].carton) | 0;
-                block =
-                  this.catalog[i].id_product_list[j].id_product[k][availability]
-                    .block;
+                  total =
+                    this.catalog[i].id_product_list[j].id_product[k][
+                      availability
+                    ].total;
 
-                // remainder
+                  // block
 
-                this.catalog[i].id_product_list[j].id_product[k][
-                  availability
-                ].remainder = count - block * list[j].carton;
-              }
+                  this.catalog[i].id_product_list[j].id_product[k][
+                    availability
+                  ].block = (count / list[j].carton) | 0;
+                  block =
+                    this.catalog[i].id_product_list[j].id_product[k][
+                      availability
+                    ].block;
 
-              product[k]["carton"] = list[j].carton;
-              if (this.catalog[i].id in this.products) {
-                this.products[this.catalog[i].id][product[k].id] = product[k];
-              } else {
-                this.products[this.catalog[i].id] = {
-                  [product[k].id]: product[k],
-                };
+                  // remainder
+
+                  this.catalog[i].id_product_list[j].id_product[k][
+                    availability
+                  ].remainder = count - block * list[j].carton;
+                }
+
+                product[k]["carton"] = list[j].carton;
+                if (this.catalog[i].id in this.products) {
+                  this.products[this.catalog[i].id][product[k].id] = product[k];
+                } else {
+                  this.products[this.catalog[i].id] = {
+                    [product[k].id]: product[k],
+                  };
+                }
               }
             }
           }
@@ -355,6 +391,23 @@ new Vue({
                 }
 
                 if (count >= 0) {
+                  if (
+                    count >
+                    this.catalog[i].id_product_list[j].id_product[k][
+                      availability
+                    ].availability
+                  ) {
+                    count =
+                      this.catalog[i].id_product_list[j].id_product[k][
+                        availability
+                      ].availability;
+                    if (this.currentScreenMain == "screenCatalogMain") {
+                      calcInput[0].value = count;
+                    } else {
+                      calcInput[1].value = count;
+                    }
+                  }
+
                   this.catalog[i].id_product_list[j].id_product[k][
                     availability
                   ].count = count;
@@ -485,9 +538,9 @@ new Vue({
         for (var j in list) {
           product = list[j].id_product;
           for (var k in product) {
-            remote = product[k].remote
-            way = product[k].way
-            stock = product[k].stock
+            remote = product[k].remote;
+            way = product[k].way;
+            stock = product[k].stock;
 
             if (stock.total > 0) {
               openCalcBtn = document.querySelectorAll(
@@ -496,12 +549,11 @@ new Vue({
               calc = document.querySelectorAll(
                 `[calc="${product[k].id}"][availability="stock"]`
               );
-        
+
               if (calc[0].style.display == "none") {
                 openCalcBtn[0].style.display = "none";
                 calc[0].style.display = "";
-              } 
-
+              }
             }
 
             if (remote.total > 0) {
@@ -511,12 +563,11 @@ new Vue({
               calc = document.querySelectorAll(
                 `[calc="${product[k].id}"][availability="remote"]`
               );
-        
+
               if (calc[0].style.display == "none") {
                 openCalcBtn[0].style.display = "none";
                 calc[0].style.display = "";
               }
-
             }
 
             if (way.total > 0) {
@@ -526,18 +577,21 @@ new Vue({
               calc = document.querySelectorAll(
                 `[calc="${product[k].id}"][availability="way"]`
               );
-        
+
               if (calc[0].style.display == "none") {
                 openCalcBtn[0].style.display = "none";
                 calc[0].style.display = "";
               }
-
             }
 
             /* */
             tab = document.querySelectorAll(`[tab="${this.catalog[i].id}"]`);
-            tabBtn = document.querySelectorAll(`[tabBtn="${this.catalog[i].id}"]`);
-            triagleTab = document.querySelectorAll(`[triagleTab="${this.catalog[i].id}"]`);
+            tabBtn = document.querySelectorAll(
+              `[tabBtn="${this.catalog[i].id}"]`
+            );
+            triagleTab = document.querySelectorAll(
+              `[triagleTab="${this.catalog[i].id}"]`
+            );
 
             if (tab[0].style.display == "none") {
               tabBtn[0].classList.add("ui-accordion-header-active");
@@ -546,11 +600,11 @@ new Vue({
                 "ui-accordion-header-icon ui-icon ui-icon-triangle-1-s";
             }
 
-
-
             panel = document.querySelectorAll(`[panel="${list[j].id}"]`);
             panelBtn = document.querySelectorAll(`[panelBtn="${list[j].id}"]`);
-            triaglePanel = document.querySelectorAll(`[triaglePanel="${list[j].id}"]`);
+            triaglePanel = document.querySelectorAll(
+              `[triaglePanel="${list[j].id}"]`
+            );
 
             // console.log(panel[0].style.display)
             if (panel[0].style.display == "none") {
@@ -563,8 +617,65 @@ new Vue({
         }
       }
     },
+
+    // окрыть калькулятор у открытых объектов
+    openCalcSelectedProducts: async function () {
+      for (var i in this.catalog) {
+        list = this.catalog[i].id_product_list;
+        for (var j in list) {
+          product = list[j].id_product;
+          for (var k in product) {
+            remote = product[k].remote;
+            way = product[k].way;
+            stock = product[k].stock;
+
+            if (stock.total > 0) {
+              openCalcBtn = document.querySelectorAll(
+                `[openCalcBtn="${product[k].id}"][availability="stock"]`
+              );
+              calc = document.querySelectorAll(
+                `[calc="${product[k].id}"][availability="stock"]`
+              );
+
+              if (calc[0].style.display == "none") {
+                openCalcBtn[0].style.display = "none";
+                calc[0].style.display = "";
+              }
+            }
+
+            if (remote.total > 0) {
+              openCalcBtn = document.querySelectorAll(
+                `[openCalcBtn="${product[k].id}"][availability="remote"]`
+              );
+              calc = document.querySelectorAll(
+                `[calc="${product[k].id}"][availability="remote"]`
+              );
+
+              if (calc[0].style.display == "none") {
+                openCalcBtn[0].style.display = "none";
+                calc[0].style.display = "";
+              }
+            }
+
+            if (way.total > 0) {
+              openCalcBtn = document.querySelectorAll(
+                `[openCalcBtn="${product[k].id}"][availability="way"]`
+              );
+              calc = document.querySelectorAll(
+                `[calc="${product[k].id}"][availability="way"]`
+              );
+
+              if (calc[0].style.display == "none") {
+                openCalcBtn[0].style.display = "none";
+                calc[0].style.display = "";
+              }
+            }
+          }
+        }
+      }
+    },
     // заррыть все кнопки меню
-    closedCatBtns: function() {
+    closedCatBtns: function () {
       btns = document.querySelectorAll('[type="mainProduct"]');
 
       // кнопки в каталоге (catalog.html)
@@ -659,7 +770,6 @@ new Vue({
       this.openedMainProduct = [];
       this.closedCatBtns();
 
-
       // this.switchScreenMain('screenCatalogMain');
     },
 
@@ -692,7 +802,6 @@ new Vue({
 
     // удаление объекта из корзины
     deleteProduct: function (id, availability) {
-
       for (var j in this.products) {
         if (id in this.products[j]) {
           product = this.products[j][id];
@@ -725,23 +834,28 @@ new Vue({
     calcPlusBusket: function (id, availability) {
       for (var j in this.products) {
         if (id in this.products[j]) {
-          product = this.products[j][id];
-          // count
-          this.products[j][id][availability].count += 1;
-          count = this.products[j][id][availability].count;
+          if (
+            this.products[j][id][availability].count <
+            this.products[j][id][availability].availability
+          ) {
+            product = this.products[j][id];
+            // count
+            this.products[j][id][availability].count += 1;
+            count = this.products[j][id][availability].count;
 
-          // total
-          this.products[j][id][availability].total = product.price * count;
-          total = this.products[j][id][availability].total;
+            // total
+            this.products[j][id][availability].total = product.price * count;
+            total = this.products[j][id][availability].total;
 
-          // block
-          this.products[j][id][availability].block =
-            (count / product.carton) | 0;
-          block = this.products[j][id][availability].block;
+            // block
+            this.products[j][id][availability].block =
+              (count / product.carton) | 0;
+            block = this.products[j][id][availability].block;
 
-          // remainder
-          this.products[j][id][availability].remainder =
-            count - block * product.carton;
+            // remainder
+            this.products[j][id][availability].remainder =
+              count - block * product.carton;
+          }
         }
       }
 
@@ -797,6 +911,16 @@ new Vue({
             count = Number(calcInput[1].value);
           } else {
             count = Number(calcInput[0].value);
+          }
+
+          if (count > this.products[j][id][availability].availability) {
+            count = this.products[j][id][availability].availability;
+
+            if (calcInput.length == 2) {
+              calcInput[1].value = count;
+            } else {
+              calcInput[0].value = count;
+            }
           }
 
           this.products[j][id][availability].count = count;
@@ -1099,6 +1223,27 @@ new Vue({
       this.orderNumber = orderInfo[0].number;
       this.order = order;
     },
+
+    // склонения блоков
+    pluralizeBlocks: function (numBlocks) {
+      // Используем остаток от деления на 10 и на 100 для определения правильного склонения
+      const lastDigit = numBlocks % 10;
+      const lastTwoDigits = numBlocks % 100;
+
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+        // Если число заканчивается на 11-19, то используем форму "блоков"
+        return "блоков";
+      } else if (lastDigit === 1) {
+        // Если число заканчивается на 1, то используем форму "блок"
+        return "блок";
+      } else if (lastDigit >= 2 && lastDigit <= 4) {
+        // Если число заканчивается на 2-4, то используем форму "блока"
+        return "блока";
+      } else {
+        // Во всех остальных случаях используем форму "блоков"
+        return "блоков";
+      }
+    },
   },
   async mounted() {
     // установка дефолтного адреса доставки
@@ -1149,11 +1294,32 @@ new Vue({
 
         this.OrderFilter();
       } else if (className.toString().includes("calendar__input")) {
-        // this.from = null
-        // this.to = null
-        // this.OrderFilter()
+        this.from = null
+        this.to = null
+        this.OrderFilter()
       }
     };
     document.addEventListener("click", onClickCalendar);
   },
+  watch: {
+    openedMainProduct() {
+      for (let id of this.openedMainProduct) {
+        let openedMainProduct = document.querySelectorAll(`[type="mainProduct"][id="${id}"]`)
+
+        if (openedMainProduct.length > 0) {
+          for (let openedMP of openedMainProduct) {
+            let panel = openedMP.parentNode.parentNode.parentNode
+            let categoryBtn = panel.parentNode
+
+            panel.style.display = 'block'
+            panel.className = 'sidebar__panel ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active'
+            // categoryBtn.className = 'btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active'
+
+           
+          }
+        }
+      }
+      
+    }
+  }
 });

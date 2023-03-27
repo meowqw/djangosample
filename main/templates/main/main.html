@@ -4,7 +4,7 @@
 
 <body class="page__body">
   <div class="site-container site-container--100vh" id="app">
-
+   
     <header class="header">
       <div class="container header__container">
         <div class="header__left">
@@ -70,7 +70,9 @@
             </div>
           </button>
         </div>
+        
       </div>
+      
     </header>
 
 
@@ -267,7 +269,7 @@
                                           <input type="number" class="input input--calc" :calcInput="product.id"
                                             availability="stock" :value="product.stock.count"
                                             v-on:input="calcInput(product.id, 'stock')">
-                                          <span>{* product.stock.block *} блоков {* product.stock.remainder *} шт</span>
+                                          <span v-if="product.stock.block != 0">{* product.stock.block *} {* pluralizeBlocks(product.stock.block) *} {* product.stock.remainder *} шт</span>
                                         </div>
                                         <button class="btn-reset product-calc__btn product-calc__btn--plus"
                                           v-on:click="calcPlus(product.id, 'stock')"></button>
@@ -316,7 +318,7 @@
                                           <input type="number" class="input input--calc" :value="product.way.count"
                                             :calcInput="product.id" availability="way"
                                             v-on:input="calcInput(product.id, 'way')">
-                                          <span>{* product.way.block *} блоков {* product.way.remainder *} шт</span>
+                                          <span v-if="product.way.block != 0">{* product.way.block *} {* pluralizeBlocks(product.way.block) *} {* product.way.remainder *} шт</span>
                                         </div>
                                         <button class="btn-reset product-calc__btn product-calc__btn--plus"
                                           v-on:click="calcPlus(product.id, 'way')"></button>
@@ -366,7 +368,7 @@
                                           <input type="number" class="input input--calc" :value="product.remote.count"
                                             :calcInput="product.id" :availability="name" :calcInput="product.id"
                                             availability="remote" v-on:input="calcInput(product.id, 'remote')">
-                                          <span>{* product.remote.block *} блоков {* product.remote.remainder *}
+                                          <span v-if="product.remote.block != 0">{* product.remote.block *}  {* pluralizeBlocks(product.remote.block) *} {* product.remote.remainder *}
                                             шт</span>
                                         </div>
                                         <button class="btn-reset product-calc__btn product-calc__btn--plus"
@@ -414,7 +416,7 @@
                                         <input type="number" class="input input--calc" :value="availability.count"
                                           :availability="name" :calcInput="product.id"
                                           v-on:input="calcInput(product.id, name)">
-                                        <span>{* availability.block *} блоков {* availability.remainder *} шт</span>
+                                        <span v-if="availability.block != 0">{* availability.block *} {* pluralizeBlocks(availability.block) *} {* availability.remainder *} шт</span>
                                       </div>
 
                                       <button class="btn-reset product-calc__btn product-calc__btn--plus"
