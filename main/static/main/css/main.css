@@ -2981,7 +2981,6 @@ a {
     width: 24px;
     height: 24px
 }
-
 .tooltip {
   position: relative;
   display: inline-block;
@@ -3157,7 +3156,7 @@ a {
 }
 .calendar__icon {
   position: absolute;
-  right: 30px;
+  right: 15px;
   top: 10px;
   z-index: 20;
   width: 22px;
@@ -3167,7 +3166,17 @@ a {
 .calendar__icon--close {
   right: 5px;
   z-index: 20;
+  display: none;
+  -webkit-transition: scale 0.1s ease-in-out;
+  -o-transition: scale 0.1s ease-in-out;
+  transition: scale 0.1s ease-in-out;
+  cursor: pointer;
+  pointer-events: all;
 }
+.calendar__icon--close:hover {
+  scale: 1.1;
+}
+
 .air-datepicker {
   border: 1px solid var(--alto-color);
   border-radius: 12px;
