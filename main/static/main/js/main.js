@@ -2207,3 +2207,35 @@
         }), s(306), s(595), s(452), s(91), s(115), s(339), new e
     })()
 })();
+
+
+const btnOpen = document?.querySelector('[data-btn-open]');
+const btnClose = document?.querySelector('[data-btn-close]');
+const modalContainer = document?.querySelector('.graph-modal__container--catalog');
+const modal = document?.querySelector('.graph-modal');
+
+btnOpen?.addEventListener('click', () => {
+  btnOpen.style.display = 'none'
+  btnClose.style.display = 'flex'
+})
+
+btnClose?.addEventListener('click', () => {
+  btnOpen.style.display = 'flex'
+  btnClose.style.display = 'none'
+})
+
+document.addEventListener("click", function (e) {
+  let m = btnClose;
+  if (e.target === modalContainer) {
+    m.style.display = 'flex';
+  } else if (e.target != modalContainer && e.target === btnOpen) {
+    m.style.display = 'none';
+    btnClose.style.display = 'flex'
+  } else if (e.target != modalContainer && e.target === modal) {
+    btnClose.style.display = 'none'
+    btnOpen.style.display = 'flex'
+  } else if (e.target === btnClose) {
+    btnOpen.style.display = 'flex'
+    btnClose.style.display = 'none'
+  }
+});

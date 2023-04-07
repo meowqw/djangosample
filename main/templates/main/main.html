@@ -12,10 +12,11 @@
             <img loading="lazy" src="{% static 'main/img/tobacco.svg' %}" class="image" width="156" height="22"
               alt="Tobacco">
           </div>
-          <button class="btn-reset btn header__btn" data-graph-path="menu"
-            v-on:click="switchScreenMain('screenCatalogMain')" data-btn-open>
-            <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28"
-              alt="path">
+
+          <button class="btn-reset btn header__btn" id="btnMenuPopup" data-graph-path="menu"
+          v-on:click="switchScreenMain('screenCatalogMain')"
+           data-btn-open>
+            <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
           </button>
           <button class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
@@ -443,8 +444,12 @@
             </div>
           </section>
 
+         
+
         </div>
       </div>
+
+     
     </main>
 
     <!-- BASKET-->
