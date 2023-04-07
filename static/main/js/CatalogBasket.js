@@ -126,22 +126,20 @@ new Vue({
 
             btn.className = `btn-reset sidebar__btn sidebar__btn--sub sidebar__btn--active sidebar__btn--active-${color}`;
             btnCat.className = `btn-reset menu__link menu__link--active menu__link--active-${color}`;
-            
-
 
             // подсветка категории
-            catBtn.className =
-              `btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--${color} ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active`;
+            catBtn.className = `btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--${color} ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active`;
 
-            catBtn.getElementsByTagName('span')[0].className = 'ui-accordion-header-icon ui-icon ui-icon-triangle-1-s'
-            catBtn.setAttribute('aria-expanded', 'true');
-            catBtn.setAttribute('aria-selected', 'true');
-            
+            catBtn.getElementsByTagName("span")[0].className =
+              "ui-accordion-header-icon ui-icon ui-icon-triangle-1-s";
+            catBtn.setAttribute("aria-expanded", "true");
+            catBtn.setAttribute("aria-selected", "true");
+
             // показываем кнопку
             closeBtn.style.display = "";
           } else {
-            catBtn.setAttribute('aria-expanded', 'false');
-            catBtn.setAttribute('aria-selected', 'false');
+            catBtn.setAttribute("aria-expanded", "false");
+            catBtn.setAttribute("aria-selected", "false");
 
             btnCat.className = `btn-reset menu__link`;
             btn.className = `btn-reset sidebar__btn sidebar__btn--sub`;
@@ -1055,6 +1053,26 @@ new Vue({
       }
 
       this.catalog = newCatalog;
+
+      // фильтрация каталога
+      this.catalog.sort((a, b) => {
+        if (a.color > b.color) {
+          return 1;
+        }
+        if (a.color < b.color) {
+          return -1;
+        }
+        if (a.color === b.color) {
+          if (a.id > b.id) {
+            return 1;
+          }
+          if (a.id < b.id) {
+            return -1;
+          }
+        }
+        return 0;
+      });
+
     },
 
     // ререндкр каталога после фильтрации
@@ -1297,9 +1315,9 @@ new Vue({
 
         this.OrderFilter();
       } else if (className.value.length == 0) {
-        this.from = null
-        this.to = null
-        this.OrderFilter()
+        this.from = null;
+        this.to = null;
+        this.OrderFilter();
       }
     };
     document.addEventListener("click", onClickCalendar);
@@ -1307,33 +1325,23 @@ new Vue({
   watch: {
     openedMainProduct() {
       for (let id of this.openedMainProduct) {
-        let openedMainProduct = document.querySelectorAll(`[type="mainProduct"][id="${id}"]`)
+        let openedMainProduct = document.querySelectorAll(
+          `[type="mainProduct"][id="${id}"]`
+        );
 
         if (openedMainProduct.length > 0) {
           for (let openedMP of openedMainProduct) {
-            let panel = openedMP.parentNode.parentNode.parentNode
-            let categoryBtn = panel.parentNode
+            let panel = openedMP.parentNode.parentNode.parentNode;
+            let categoryBtn = panel.parentNode;
 
-            panel.style.display = 'block'
-            panel.className = 'sidebar__panel ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active'
+            panel.style.display = "block";
+            panel.className =
+              "sidebar__panel ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active";
+            
             // categoryBtn.className = 'btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active'
-
-           
           }
         }
       }
-      
-    }
-  }
+    },
+  },
 });
-
-
-// document.getElementById('button-clear').onclick = function (e) {
-//   document.getElementById('input').value = "";
-// };
-
-// document.getElementById('button-clear').onclick = function (e) {
-//   document.getElementById('input').value = ""
-//   document.getElementById('input').setAttribute('from', "none")
-//   document.getElementById('input').setAttribute('to', "none")
-// }
