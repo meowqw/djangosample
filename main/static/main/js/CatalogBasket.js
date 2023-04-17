@@ -1342,6 +1342,18 @@ new Vue({
           }
         }
       }
-    },
+    }, 
+    currentScreenMain() {
+      if (this.currentScreenMain != 'screenCatalogMain') {
+        document.getElementById('btnMenu').style.display = ''
+        document.getElementById('btnMenuPopup').style.display = 'none'
+        document.getElementById('btnMenuPopupClose').style.display = 'none'
+      } else {
+        document.getElementById('btnMenu').style.display = 'none'
+        document.getElementById('btnMenuPopup').style.display = ''
+        document.getElementById('btnMenuPopupClose').style.display = ''
+
+      }
+    }
   },
 });

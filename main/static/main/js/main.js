@@ -2211,31 +2211,20 @@
 
 const btnOpen = document?.querySelector('[data-btn-open]');
 const btnClose = document?.querySelector('[data-btn-close]');
-const modalContainer = document?.querySelector('.graph-modal__container--catalog');
-const modal = document?.querySelector('.graph-modal');
+const btnClosePopup = document?.querySelector('.graph-modal__close--white');
 
 btnOpen?.addEventListener('click', () => {
-  btnOpen.style.display = 'none'
-  btnClose.style.display = 'flex'
+  btnOpen.style.display = 'none';
+  btnClose.style.display = 'flex';
 })
 
 btnClose?.addEventListener('click', () => {
-  btnOpen.style.display = 'flex'
-  btnClose.style.display = 'none'
+  btnOpen.style.display = 'flex';
+  btnClose.style.display = 'none';
 })
 
-document.addEventListener("click", function (e) {
-  let m = btnClose;
-  if (e.target === modalContainer) {
-    m.style.display = 'flex';
-  } else if (e.target != modalContainer && e.target === btnOpen) {
-    m.style.display = 'none';
-    btnClose.style.display = 'flex'
-  } else if (e.target != modalContainer && e.target === modal) {
-    btnClose.style.display = 'none'
-    btnOpen.style.display = 'flex'
-  } else if (e.target === btnClose) {
-    btnOpen.style.display = 'flex'
-    btnClose.style.display = 'none'
-  }
-});
+btnClosePopup?.addEventListener('click', () => {
+  btnOpen.style.display = 'flex';
+  btnClose.style.display = 'none';
+})
+

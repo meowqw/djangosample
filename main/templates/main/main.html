@@ -13,18 +13,30 @@
               alt="Tobacco">
           </div>
 
-          <button class="btn-reset btn header__btn" id="btnMenuPopup" data-graph-path="menu"
-          v-on:click="switchScreenMain('screenCatalogMain')"
+           <button class="btn-reset btn header__btn" data-graph-path="menu" style="display:" id="btnMenuPopup"
            data-btn-open>
             <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
           </button>
-          <button class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
+          <button id="btnMenuPopupClose" style="display:" class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
             <img loading="lazy" src="{% static 'main/img/close.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
+          </button> 
+
+          <button class="btn-reset btn header__btn" id="btnMenu" style="display:none" v-on:click="switchScreenMain('screenCatalogMain')">
+            <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28" alt="path">
+            <span>Каталог</span>
           </button>
+          {% comment %} <button class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
+            <img loading="lazy" src="{% static 'main/img/close.svg' %}" class="image" width="28" height="28" alt="path">
+            <span>Каталог</span>
+          </button> {% endcomment %}
+    
+
           <button class="btn-reset btn btn--gray header__user"
             v-on:click="switchScreenMain('screenAccountMain')"></button>
+
+            
         </div>
         <div class="header__right"
           v-if="currentScreenMain != 'screenBasketMain' && currentScreenMain != 'screenPaymentMain'">
