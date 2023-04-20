@@ -39,6 +39,10 @@ new Vue({
 
     openedMainProduct: [],
     openedProduct: [],
+    openedMainCategory: [],
+
+    // main category
+    mainCategory: [],
   },
   methods: {
     // get request
@@ -148,6 +152,8 @@ new Vue({
           }
         }
       }
+
+
       if (!this.openedMainProduct.includes(id)) {
         // получить товары
         this.getProductsByMainProduct(id);
@@ -1264,6 +1270,85 @@ new Vue({
         return "блоков";
       }
     },
+
+    /** ЕСЛИ ВЫБРАН ФИЛЬТР ПО NEW TOP SALE НАЖАТИЕ НА КАТЕГОРИЮ ОТКРЫЫАЕТ ПРОДУКТЫ */
+
+    // добавляем рподукты
+    addProduct: async function (category) {
+      for (let i in this.mainCategory) {
+        if (this.mainCategory[i].id == category) {
+          let products = this.mainCategory[i].id_main_product
+          for (let product of products) {
+            await this.getProductsByMainProduct(product.id, category)
+          }
+        }
+      }
+    },
+
+    // подсвечиваем кнопки
+    lightButton: async function (catId) {
+      for (let productlist of this.catalog) {
+        btns = document.querySelectorAll('[type="mainProduct"]');
+
+        // кнопки в каталоге (catalog.html)
+        btnsCatalog = document.querySelectorAll('[type="mainProductCatalog"]');
+
+        // кнопка категории
+        catBtn = document.querySelectorAll(`[category="${catId}"]`)[0];
+
+        // кнопки закрыть
+        closeBtns = document.querySelectorAll(`[element="close"]`);
+
+        for (var i in btns) {
+          btn = btns[i];
+          btnCat = btnsCatalog[i];
+          closeBtn = closeBtns[i];
+          if (btn.id == productlist.id) {
+            color = btn.getAttribute("color");
+
+            btn.className = `btn-reset sidebar__btn sidebar__btn--sub sidebar__btn--active sidebar__btn--active-${color}`;
+            btnCat.className = `btn-reset menu__link menu__link--active menu__link--active-${color}`;
+
+            // подсветка категории
+            catBtn.className = `btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--${color} ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active`;
+
+            catBtn.getElementsByTagName("span")[0].className =
+              "ui-accordion-header-icon ui-icon ui-icon-triangle-1-s";
+            catBtn.setAttribute("aria-expanded", "true");
+            catBtn.setAttribute("aria-selected", "true");
+
+            // показываем кнопку
+            closeBtn.style.display = "";
+          }
+        }
+      }
+    },
+
+    // отрабытывает при нажатии
+    addProductFromMainCategory: async function (category) {
+      if (!this.openedMainCategory.includes(category)) {
+
+        if (this.status.length > 0) {
+
+          await this.addProduct(category);
+
+          await this.lightButton(category);
+
+        }
+        this.openedMainCategory.push(category);
+
+      } else {
+        this.openedMainCategory = this.openedMainCategory.filter(function (
+          f
+        ) {
+          return f !== category;
+        });
+      }
+
+
+    },
+
+    /* ------------------- */
   },
   async mounted() {
     // установка дефолтного адреса доставки
@@ -1283,6 +1368,10 @@ new Vue({
     // if (total != undefined) {
     //     this.total = JSON.parse(total)
     // }
+
+    let mainCategory = await this.getData('/api/v1/MainCategory/')
+    this.mainCategory = mainCategory;
+
   },
   // отслеживаем календарь
   created() {
@@ -1337,11 +1426,23 @@ new Vue({
             panel.style.display = "block";
             panel.className =
               "sidebar__panel ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active";
-            
+
             // categoryBtn.className = 'btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active'
           }
         }
       }
     },
+    currentScreenMain() {
+      if (this.currentScreenMain != 'screenCatalogMain') {
+        document.getElementById('btnMenu').style.display = ''
+        document.getElementById('btnMenuPopup').style.display = 'none'
+        document.getElementById('btnMenuPopupClose').style.display = 'none'
+      } else {
+        document.getElementById('btnMenu').style.display = 'none'
+        document.getElementById('btnMenuPopup').style.display = ''
+        document.getElementById('btnMenuPopupClose').style.display = ''
+
+      }
+    }
   },
 });
