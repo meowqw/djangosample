@@ -2652,10 +2652,10 @@ a {
 .active,
 .product-accordion:hover {
   border: 1px solid var(--blue);
-  background-color: #eefcfe;
+  /* background-color: #eefcfe; */
 }
 .active::after {
-  content: url(../img/arrow-up.svg);
+  /* content: url(../img/arrow-up.svg); */
 }
 .accordion-panel {
   overflow: hidden;
@@ -2672,7 +2672,7 @@ a {
 }
 .ui-accordion-header-active {
   border: 1px solid var(--blue);
-  background-color: #eefcfe;
+  background-color: inherit;
 }
 .accordion-item--green .ui-accordion-header-active {
   border: 1px solid #8ab964;

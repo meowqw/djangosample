@@ -13,12 +13,12 @@
               alt="Tobacco">
           </div>
 
-           <button class="btn-reset btn header__btn" data-graph-path="menu" style="display:" id="btnMenuPopup"
+           <button class="btn-reset btn header__btn" data-graph-path="menu" style="display:''" id="btnMenuPopup"
            data-btn-open>
             <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
           </button>
-          <button id="btnMenuPopupClose" style="display:" class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
+          <button id="btnMenuPopupClose" style="display:''" class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
             <img loading="lazy" src="{% static 'main/img/close.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
           </button> 
@@ -49,7 +49,7 @@
                   alt="path">
               </div>
               <div class="header__info">
-                <div class="header__crit">В наличии</div>
+                <div class="header__crit">В наличии</div>
                 <div class="header__value">{* total.stock *} ₽</div>
               </div>
             </li>
@@ -69,7 +69,7 @@
                   alt="path">
               </div>
               <div class="header__info">
-                <div class="header__crit">В пути</div>
+                <div class="header__crit">В пути</div>
                 <div class="header__value">{* total.way *} ₽</div>
               </div>
             </li>
@@ -112,9 +112,9 @@
                   </span>
                   <div class="select-items dropdown-list">
                     <div class="dropdown-option" v-on:click="FilterAvailability('stock,remote,way')">Все</div>
-                    <div class="dropdown-option" v-on:click="FilterAvailability('stock')">В наличии</div>
+                    <div class="dropdown-option" v-on:click="FilterAvailability('stock')">В наличии</div>
                     <div class="dropdown-option" v-on:click="FilterAvailability('remote')">Удаленный склад</div>
-                    <div class="dropdown-option" v-on:click="FilterAvailability('way')">В пути</div>
+                    <div class="dropdown-option" v-on:click="FilterAvailability('way')">В пути</div>
                   </div>
                 </div>
               </div>
