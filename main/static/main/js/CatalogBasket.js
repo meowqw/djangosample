@@ -45,6 +45,8 @@ new Vue({
 
     // main category
     mainCategory: [],
+
+    menuPopupIsOpen: false,
   },
   methods: {
     // get request
@@ -1378,6 +1380,12 @@ new Vue({
 
         }
       }
+    },
+    openPopupHead: function() {
+      this.menuPopupIsOpen = true;
+    },
+    closePopupHead: function() {
+      this.menuPopupIsOpen = false;
     }
 
     /* ------------------- */
@@ -1442,6 +1450,18 @@ new Vue({
       }
     };
     document.addEventListener("click", onClickCalendar);
+    document.addEventListener('click', (e) => {
+        console.log(e.target.id)
+        if (e.target.id == 'menuPopupHead' && this.menuPopupIsOpen) {
+            document.getElementById('btnMenuPopup').style.display = "flex";
+            document.getElementById('btnMenuPopupClose').style.display = "none";
+        }
+
+        if (e.target.id == "btnAccountMain" && this.menuPopupIsOpen) {
+          document.getElementById('menuPopupHead').className = 'graph-modal';
+          document.getElementById('modalContainer').className = 'graph-modal__container';
+        }
+    })
   },
   watch: {
     openedMainProduct() {

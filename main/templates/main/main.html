@@ -13,12 +13,12 @@
               alt="Tobacco">
           </div>
 
-           <button class="btn-reset btn header__btn" data-graph-path="menu" style="display:''" id="btnMenuPopup"
+           <button class="btn-reset btn header__btn" v-on:click="openPopupHead()" data-graph-path="menu" style="display:''" id="btnMenuPopup"
            data-btn-open>
             <img loading="lazy" src="{% static 'main/img/hamburger.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
           </button>
-          <button id="btnMenuPopupClose" style="display:''" class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
+          <button id="btnMenuPopupClose" v-on:click="closePopupHead()" style="display:''" class="btn-reset btn header__btn header__btn--catalog js-modal-close" data-btn-close>
             <img loading="lazy" src="{% static 'main/img/close.svg' %}" class="image" width="28" height="28" alt="path">
             <span>Каталог</span>
           </button> 
@@ -33,7 +33,7 @@
           </button> {% endcomment %}
     
 
-          <button class="btn-reset btn btn--gray header__user"
+          <button class="btn-reset btn btn--gray header__user" id="btnAccountMain"
             v-on:click="switchScreenMain('screenAccountMain')"></button>
 
             
