@@ -1461,6 +1461,11 @@ new Vue({
           document.getElementById('menuPopupHead').className = 'graph-modal';
           document.getElementById('modalContainer').className = 'graph-modal__container';
         }
+
+        if (e.target.id == "cartBtn" && this.menuPopupIsOpen) {
+          document.getElementById('menuPopupHead').className = 'graph-modal';
+          document.getElementById('modalContainer').className = 'graph-modal__container';
+        }
     })
   },
   watch: {
