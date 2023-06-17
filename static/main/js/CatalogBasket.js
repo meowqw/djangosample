@@ -88,6 +88,8 @@ new Vue({
       await this.catalogProcessingAfterFilter(newCatalog);
 
       await this.openCalcSelectedProducts();
+
+      this.pointControlItemProducts()
     },
 
     // удалить данные из каталога
@@ -318,6 +320,8 @@ new Vue({
         }
       }
 
+      this.pointControlItemProducts();
+
       // расчет тоталов
       this.totalCalculate();
 
@@ -366,6 +370,9 @@ new Vue({
                     availability
                   ].remainder = count - block * list[j].carton;
                 } else {
+                  
+                  this.pointControlItemProducts();
+
                   this.openCalc(id, availability);
                   break;
                 }
@@ -390,6 +397,28 @@ new Vue({
       this.basketController();
 
       // await this.goBasket();
+    },
+
+    // управление точкасм у продуктов
+    pointControlItemProducts() {
+      for (let i in this.products) {
+        let category = this.products[i]
+        for (let y in category) {
+          let product = category[y]
+          let remote = product.remote
+          let way = product.way
+          let stock = product.stock
+          if (remote.count == 0 && way.count == 0 && stock.count == 0) {
+            delete this.products[i][y]
+            if (Object.keys(this.products[i]).length == 0) {
+              delete this.products[i];
+              document.querySelector(`[tabbtn="${i}"]`).className = 'btn-reset btn--accordion main-body__accordion accordion-header ui-accordion-header-active';
+            } 
+          } else {
+            document.querySelector(`[tabbtn="${i}"]`).className = `btn-reset btn--accordion main-body__accordion accordion-header ui-accordion-header-active point`
+          }
+        }
+      }
     },
 
     calcInput: async function (id, availability) {
@@ -554,7 +583,6 @@ new Vue({
 
       this.basket = basket;
     },
-
     // открываем panel если проудкт выбран пользователем
     openSelectedProducts: async function () {
       // console.log(1);
@@ -1386,8 +1414,7 @@ new Vue({
     },
     closePopupHead: function() {
       this.menuPopupIsOpen = false;
-    }
-
+    },
     /* ------------------- */
   },
   async mounted() {
@@ -1451,7 +1478,7 @@ new Vue({
     };
     document.addEventListener("click", onClickCalendar);
     document.addEventListener('click', (e) => {
-        console.log(e.target.id)
+        // console.log(e.target.id)
         if (e.target.id == 'menuPopupHead' && this.menuPopupIsOpen) {
             document.getElementById('btnMenuPopup').style.display = "flex";
             document.getElementById('btnMenuPopupClose').style.display = "none";
@@ -1468,6 +1495,7 @@ new Vue({
         }
     })
   },
+
   watch: {
     openedMainProduct() {
       for (let id of this.openedMainProduct) {

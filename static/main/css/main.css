@@ -513,7 +513,11 @@ a {
   display: none;
 }
 .filtr {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   border-radius: 18px;
+  width: 100%;
 }
 .filtr__dropdown {
   position: relative;
@@ -524,36 +528,24 @@ a {
 }
 .filtr__title {
   position: relative;
-  display: inline-block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   margin: 0;
   border-top: 1px solid var(--alto-color);
-  border-left: 1px solid var(--alto-color);
-  border-radius: 18px 18px 0 0;
-  padding: 12px 35px;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 29px;
-}
-.filtr__title::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  width: 187px;
-  height: 1px;
-  background-color: var(--light-color);
-}
-.filtr__title::after {
-  content: "";
-  position: absolute;
-  right: -48px;
-  bottom: -1px;
   border-bottom: 1px solid var(--alto-color);
   border-left: 1px solid var(--alto-color);
-  border-bottom-left-radius: 18px;
-  width: 50px;
-  height: 83%;
-  background-color: var(--light-color);
+  border-radius: 18px 0 0 18px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
 }
 .filtr__content {
   display: -webkit-box;
@@ -568,9 +560,10 @@ a {
   border-top: 1px solid var(--alto-color);
   border-right: 1px solid var(--alto-color);
   border-bottom: 1px solid var(--alto-color);
-  border-left: 1px solid var(--alto-color);
-  border-radius: 0 18px 18px;
-  padding: 31px 35px;
+  border-left: none;
+  border-radius: 0 18px 18px 0;
+  padding: 10px 20px 10px 0;
+  width: 100%;
   gap: 20px;
 }
 @media (max-width: 1280px) {
@@ -588,10 +581,12 @@ a {
   display: grid;
   -ms-grid-columns: (1fr) [3];
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  width: 100%;
+  max-width: 155px;
+  gap: 15px;
 }
 .filtr__btn {
-  width: 70px;
+  width: 100%;
   height: 42px;
 }
 .filtr__span {
@@ -3257,4 +3252,38 @@ a {
 .air-datepicker-cell.-in-range-:hover {
   color: var(--light-color);
   background: var(--alto-color);
+}
+
+.point::before {
+  content: "";
+  position: absolute;
+  right: 20px;
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  background-color: var(--dark-color);
+}
+.point--green::before {
+  background-color: #8ab964;
+}
+.point--orange::before {
+  background-color: var(--orange);
+}
+.point--yellow::before {
+  background-color: var(--yellow);
+}
+.point--light-pink::before {
+  background-color: var(--light-pink);
+}
+.point--blue::before {
+  background-color: var(--blue);
+}
+.point--purple::before {
+  background-color: var(--purple);
+}
+.point--red::before {
+  background-color: var(--red);
+}
+.point--pink::before {
+  background-color: var(--pink);
 }
