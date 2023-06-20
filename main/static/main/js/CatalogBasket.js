@@ -11,6 +11,7 @@ new Vue({
     products: {}, // список продуктов, выбранных пользователем
     basket: [],
     categories: {},
+    categoriesIdProducts: {},
     total: { total: 0, stock: 0, remote: 0, way: 0 },
 
     // фильтр каталог
@@ -40,6 +41,7 @@ new Vue({
     openedMainProduct: [],
     openedProduct: [],
     openedMainCategory: [],
+    openedCategory: [],
 
     categoryStructure: {},
 
@@ -174,13 +176,22 @@ new Vue({
       }
 
       this.addProductFromMainCategory(catId);
-
       if (!this.openedMainProduct.includes(id)) {
         // получить товары
         this.getProductsByMainProduct(id);
       } else {
         this.delProductsFromCatalog(id);
       }
+    },
+
+    addCategoryToOpenedCategory(categoryId) {
+      if (!this.openedCategory.includes(categoryId)) {
+        this.openedCategory.push(categoryId)
+      } else {
+        index = this.openedCategory.indexOf(categoryId);
+        this.openedCategory.splice(index, 1); 
+      }
+      console.log(this.openedCategory);
     },
     // открыть/закрыть таб каталога (список продуктов)
     openTab: function (id) {
@@ -1024,6 +1035,17 @@ new Vue({
     },
 
     FilterStatus: function () {
+      if (this.status.length > 0) {
+        if (this.openedMainProduct.length == 0) {
+          for (category of this.mainCategory) {
+            for (product of category['id_main_product']) {
+              if (!this.openedMainProduct.includes(product.id)) {
+                this.openedMainProduct.push(product.id)
+              }
+            }
+          }
+        } 
+      }
       this.FilterCatalog();
     },
 

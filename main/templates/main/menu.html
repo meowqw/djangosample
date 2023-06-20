@@ -4,7 +4,7 @@
   <ul class="list-reset sidebar__list accordion">
 
     {% for category in categories %}
-    <li class="sidebar__item accordion-item accordion-item--{{category.color}}">
+    <li class="sidebar__item accordion-item accordion-item--{{category.color}}" v-on:click="addCategoryToOpenedCategory({{category.id}})">
       <button category="{{category.id}}" color="{{category.color}}" v-on:click="addProductFromMainCategory({{category.id}})"
         class="btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--{{category.color}}">{{category.name}}</button>
         
@@ -13,7 +13,6 @@
       <div class="sidebar__panel" mainProductPanel="{{category.id}}">
         <ul class="list-reset sidebar__sublist">
           {% for main_product in category.id_main_product.all %}
-
 
           <li class="sidebar__subitem">
 
