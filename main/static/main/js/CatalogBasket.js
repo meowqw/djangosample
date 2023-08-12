@@ -49,6 +49,10 @@ new Vue({
     mainCategory: [],
 
     menuPopupIsOpen: false,
+
+    // хранит id подкатегорий в которых если выюранные товары
+    selectedSubcategory: [],
+    selectedProduct: [],
   },
   methods: {
     // get request
@@ -91,7 +95,73 @@ new Vue({
 
       await this.openCalcSelectedProducts();
 
-      this.pointControlItemProducts()
+      this.pointControlItemProducts();
+    },
+
+    saveToStorage() {
+      localStorage.setItem("catalog", JSON.stringify(this.catalog));
+      localStorage.setItem("products", JSON.stringify(this.products));
+      localStorage.setItem("basket", JSON.stringify(this.basket));
+      localStorage.setItem("categories", JSON.stringify(this.categories));
+      localStorage.setItem(
+        "categoriesIdProducts",
+        JSON.stringify(this.categoriesIdProducts)
+      );
+      localStorage.setItem("total", JSON.stringify(this.total));
+      localStorage.setItem(
+        "openedMainProduct",
+        JSON.stringify(this.openedMainProduct)
+      );
+      localStorage.setItem("openedProduct", JSON.stringify(this.openedProduct));
+      localStorage.setItem(
+        "openedMainCategory",
+        JSON.stringify(this.openedMainCategory)
+      );
+      localStorage.setItem(
+        "openedCategory",
+        JSON.stringify(this.openedCategory)
+      );
+      localStorage.setItem("mainCategory", JSON.stringify(this.mainCategory));
+      localStorage.setItem(
+        "categoryStructure",
+        JSON.stringify(this.categoryStructure)
+      );
+      localStorage.setItem(
+        "selectedSubcategory",
+        JSON.stringify(this.selectedSubcategory)
+      );
+      localStorage.setItem(
+        "selectedProduct",
+        JSON.stringify(this.selectedProduct)
+      );
+    },
+
+    loadStorage() {
+      let items = [
+        "catalog",
+        "products",
+        "basket",
+        "categories",
+        "categoriesIdProducts",
+        "total",
+        "openedMainProduct",
+        "openedProduct",
+        "openedMainCategory",
+        "openedCategory",
+        "mainCategory",
+        "categoryStructure",
+        "selectedSubcategory",
+        "selectedProduct",
+      ];
+
+      for (let i of items) {
+        let storage = localStorage.getItem(i);
+        var data = JSON.parse(storage);
+
+        if (data) {
+          this[i] = data;
+        }
+      }
     },
 
     // удалить данные из каталога
@@ -101,11 +171,6 @@ new Vue({
 
       for (var i in this.catalog) {
         if (this.catalog[i].id == id) {
-          // удаляем продукт из this.products
-          // if (this.catalog[i].id in this.products) {
-          //   delete this.products[this.catalog[i].id];
-          // }
-
           this.catalog.splice(i, 1);
         }
       }
@@ -156,13 +221,12 @@ new Vue({
             // показываем кнопку
             closeBtn.style.display = "";
 
-            this.categoryStructure[catId].push(id)
+            this.categoryStructure[catId].push(id);
           } else {
             const index = this.categoryStructure[catId].indexOf(id); // находим индекс элемента
             if (index > -1) {
               this.categoryStructure[catId].splice(index, 1); // удаляем элемент по индексу
             }
-
 
             catBtn.setAttribute("aria-expanded", "false");
             catBtn.setAttribute("aria-selected", "false");
@@ -182,16 +246,17 @@ new Vue({
       } else {
         this.delProductsFromCatalog(id);
       }
+
+      this.saveToStorage();
     },
 
     addCategoryToOpenedCategory(categoryId) {
       if (!this.openedCategory.includes(categoryId)) {
-        this.openedCategory.push(categoryId)
+        this.openedCategory.push(categoryId);
       } else {
         index = this.openedCategory.indexOf(categoryId);
-        this.openedCategory.splice(index, 1); 
+        this.openedCategory.splice(index, 1);
       }
-      console.log(this.openedCategory);
     },
     // открыть/закрыть таб каталога (список продуктов)
     openTab: function (id) {
@@ -330,6 +395,7 @@ new Vue({
           }
         }
       }
+      this.selectedSubcategoryProcessing();
 
       this.pointControlItemProducts();
 
@@ -338,8 +404,53 @@ new Vue({
 
       // констроль состояния корзины
       this.basketController();
+    },
 
-      // await this.goBasket();
+    // сохраняем id подкатегорий, котоыре содержат выбранные товары (сохраняем id открытых товаров)
+    selectedSubcategoryProcessing() {
+      subCategoryObject = {};
+      for (let i in this.catalog) {
+        let productList = this.catalog[i].id_product_list;
+        for (let y in productList) {
+          let products = productList[y].id_product;
+          for (let a in products) {
+            let product = products[a];
+            let remote = product.remote;
+            let way = product.way;
+            let stock = product.stock;
+
+            if (productList[y].id in subCategoryObject) {
+              subCategoryObject[productList[y].id].push(remote.count);
+              subCategoryObject[productList[y].id].push(way.count);
+              subCategoryObject[productList[y].id].push(stock.count);
+            } else {
+              subCategoryObject[productList[y].id] = [
+                remote.count,
+                way.count,
+                stock.count,
+              ];
+            }
+          }
+        }
+      }
+
+      for (let i in subCategoryObject) {
+        let sum = subCategoryObject[i].reduce(function (acc, currentValue) {
+          return acc + currentValue;
+        }, 0);
+
+        if (sum > 0) {
+          if (!this.selectedSubcategory.includes(i)) {
+            this.selectedSubcategory.push(i);
+          }
+        } else {
+          this.selectedSubcategory = this.selectedSubcategory.filter(function (
+            f
+          ) {
+            return f !== i;
+          });
+        }
+      }
     },
 
     // калькулятор -
@@ -381,9 +492,6 @@ new Vue({
                     availability
                   ].remainder = count - block * list[j].carton;
                 } else {
-                  
-                  this.pointControlItemProducts();
-
                   this.openCalc(id, availability);
                   break;
                 }
@@ -401,33 +509,59 @@ new Vue({
           }
         }
       }
+
+      this.selectedSubcategoryProcessing();
+
+      this.pointControlItemProducts();
+
       // расчет тоталов
       this.totalCalculate();
 
       // констроль состояния корзины
       this.basketController();
-
-      // await this.goBasket();
     },
 
     // управление точкасм у продуктов
     pointControlItemProducts() {
       for (let i in this.products) {
-        let category = this.products[i]
+        let category = this.products[i];
         for (let y in category) {
-          let product = category[y]
-          let remote = product.remote
-          let way = product.way
-          let stock = product.stock
+          let product = category[y];
+          let remote = product.remote;
+          let way = product.way;
+          let stock = product.stock;
           if (remote.count == 0 && way.count == 0 && stock.count == 0) {
-            delete this.products[i][y]
+            delete this.products[i][y];
             if (Object.keys(this.products[i]).length == 0) {
               delete this.products[i];
-              document.querySelector(`[tabbtn="${i}"]`).className = 'btn-reset btn--accordion main-body__accordion accordion-header ui-accordion-header-active';
-            } 
+              document.querySelector(`[tabbtn="${i}"]`).className =
+                "btn-reset btn--accordion main-body__accordion accordion-header ui-accordion-header-active";
+            }
           } else {
-            document.querySelector(`[tabbtn="${i}"]`).className = `btn-reset btn--accordion main-body__accordion accordion-header ui-accordion-header-active point`
+            try {
+              document.querySelector(
+                `[tabbtn="${i}"]`
+              ).className = `btn-reset btn--accordion main-body__accordion accordion-header ui-accordion-header-active point`;
+            } catch {
+              //
+            }
           }
+        }
+      }
+
+      this.pointControlSubcategory();
+    },
+
+    pointControlSubcategory() {
+      var elements = document.querySelectorAll("[panelbtn]");
+      for (var i = 0; i < elements.length; i++) {
+        var element = elements[i];
+        if (
+          this.selectedSubcategory.includes(element.getAttribute("panelbtn"))
+        ) {
+          element.classList.add("point");
+        } else {
+          element.classList.remove("point");
         }
       }
     },
@@ -513,13 +647,16 @@ new Vue({
           }
         }
       }
+
+      this.selectedSubcategoryProcessing();
+
+      this.pointControlItemProducts();
+
       // расчет тоталов
       this.totalCalculate();
 
       // констроль состояния корзины
       this.basketController();
-
-      // await this.goBasket();
     },
 
     // расчет тоталов
@@ -547,8 +684,7 @@ new Vue({
       this.total.remote = remoteRes;
       this.total.total = stockRes + wayRes + remoteRes;
 
-      localStorage.setItem("catalog", JSON.stringify(this.catalog));
-      localStorage.setItem("total", JSON.stringify(this.total));
+      this.saveToStorage();
 
       // console.log(this.products);
     },
@@ -1038,13 +1174,13 @@ new Vue({
       if (this.status.length > 0) {
         if (this.openedMainProduct.length == 0) {
           for (category of this.mainCategory) {
-            for (product of category['id_main_product']) {
+            for (product of category["id_main_product"]) {
               if (!this.openedMainProduct.includes(product.id)) {
-                this.openedMainProduct.push(product.id)
+                this.openedMainProduct.push(product.id);
               }
             }
           }
-        } 
+        }
       }
       this.FilterCatalog();
     },
@@ -1147,7 +1283,6 @@ new Vue({
         }
         return 0;
       });
-
     },
 
     // ререндкр каталога после фильтрации
@@ -1346,9 +1481,9 @@ new Vue({
     addProduct: async function (category) {
       for (let i in this.mainCategory) {
         if (this.mainCategory[i].id == category) {
-          let products = this.mainCategory[i].id_main_product
+          let products = this.mainCategory[i].id_main_product;
           for (let product of products) {
-            await this.getProductsByMainProduct(product.id, category)
+            await this.getProductsByMainProduct(product.id, category);
           }
         }
       }
@@ -1396,46 +1531,62 @@ new Vue({
     // отрабытывает при нажатии
     addProductFromMainCategory: async function (category) {
       if (!this.openedMainCategory.includes(category)) {
-
         if (this.status.length > 0) {
-
           await this.addProduct(category);
 
           await this.lightButton(category);
-
         }
         this.openedMainCategory.push(category);
-
       } else {
         // console.log(1)
-        this.openedMainCategory = this.openedMainCategory.filter(function (
-          f
-        ) {
+        this.openedMainCategory = this.openedMainCategory.filter(function (f) {
           return f !== category;
         });
 
         if (category in this.categoryStructure) {
           if (this.categoryStructure[category].length) {
-            let btn = document.querySelectorAll(`[category="${category}"]`)[0]
-            let color = btn.getAttribute('color');
+            let btn = document.querySelectorAll(`[category="${category}"]`)[0];
+            let color = btn.getAttribute("color");
             // console.log(color);
             btn.classList.add(`sidebar__btn--active-${color}`);
 
             // document.querySelectorAll(`[category="${category}"]`)[0].classList.add('ui-accordion-header-active');
-
           } else {
             // console.log('non style')
-            document.querySelectorAll(`[category="${category}"]`)[0].className = 'btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-collapsed ui-corner-all';
+            document.querySelectorAll(`[category="${category}"]`)[0].className =
+              "btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-collapsed ui-corner-all";
           }
-
         }
       }
     },
-    openPopupHead: function() {
+    openPopupHead: function () {
       this.menuPopupIsOpen = true;
     },
-    closePopupHead: function() {
+    closePopupHead: function () {
       this.menuPopupIsOpen = false;
+    },
+
+    loadData() {
+      for (let i in this.categoryStructure) {
+        this.categoryStructure[i] = [...new Set(this.categoryStructure[i])];
+        if (this.categoryStructure[i].length) {
+          this.lightButton(i);
+        } else {
+          delete this.categoryStructure[i];
+        }
+      }
+      this.pointControlItemProducts();
+    },
+
+    getCategoryNameBySubCategory(id) {
+      for (let i in this.mainCategory) {
+        let mainPoductList = this.mainCategory[i].id_main_product;
+        for (let y in mainPoductList) {
+          if (mainPoductList[y].id == id) {
+            return this.mainCategory[i].name;
+          }
+        }
+      }
     },
     /* ------------------- */
   },
@@ -1446,21 +1597,12 @@ new Vue({
 
     await this.getOrders("");
 
-    // загрузка данных из локального хранилища
-    // const catalog = localStorage.getItem('catalog');
-    // const total = localStorage.getItem('total');
+    await this.loadStorage();
 
-    // if (catalog != undefined) {
-    //     this.catalog = JSON.parse(catalog)
-    // }
-
-    // if (total != undefined) {
-    //     this.total = JSON.parse(total)
-    // }
-
-    let mainCategory = await this.getData('/api/v1/MainCategory/')
+    let mainCategory = await this.getData("/api/v1/MainCategory/");
     this.mainCategory = mainCategory;
 
+    await this.loadData();
   },
   // отслеживаем календарь
   created() {
@@ -1499,23 +1641,25 @@ new Vue({
       }
     };
     document.addEventListener("click", onClickCalendar);
-    document.addEventListener('click', (e) => {
-        // console.log(e.target.id)
-        if (e.target.id == 'menuPopupHead' && this.menuPopupIsOpen) {
-            document.getElementById('btnMenuPopup').style.display = "flex";
-            document.getElementById('btnMenuPopupClose').style.display = "none";
-        }
+    document.addEventListener("click", (e) => {
+      // console.log(e.target.id)
+      if (e.target.id == "menuPopupHead" && this.menuPopupIsOpen) {
+        document.getElementById("btnMenuPopup").style.display = "flex";
+        document.getElementById("btnMenuPopupClose").style.display = "none";
+      }
 
-        if (e.target.id == "btnAccountMain" && this.menuPopupIsOpen) {
-          document.getElementById('menuPopupHead').className = 'graph-modal';
-          document.getElementById('modalContainer').className = 'graph-modal__container';
-        }
+      if (e.target.id == "btnAccountMain" && this.menuPopupIsOpen) {
+        document.getElementById("menuPopupHead").className = "graph-modal";
+        document.getElementById("modalContainer").className =
+          "graph-modal__container";
+      }
 
-        if (e.target.id == "cartBtn" && this.menuPopupIsOpen) {
-          document.getElementById('menuPopupHead').className = 'graph-modal';
-          document.getElementById('modalContainer').className = 'graph-modal__container';
-        }
-    })
+      if (e.target.id == "cartBtn" && this.menuPopupIsOpen) {
+        document.getElementById("menuPopupHead").className = "graph-modal";
+        document.getElementById("modalContainer").className =
+          "graph-modal__container";
+      }
+    });
   },
 
   watch: {
@@ -1529,27 +1673,20 @@ new Vue({
           for (let openedMP of openedMainProduct) {
             let panel = openedMP.parentNode.parentNode.parentNode;
             let categoryBtn = panel.parentNode;
-
-            // panel.style.display = "block";
-            // panel.className =
-            //   "sidebar__panel ui-accordion-content ui-corner-bottom ui-helper-reset ui-widget-content ui-accordion-content-active";
-
-            // categoryBtn.className = 'btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--blue ui-accordion-header ui-corner-top ui-state-default ui-accordion-icons ui-sortable-handle ui-accordion-header-active ui-state-active'
           }
         }
       }
     },
     currentScreenMain() {
-      if (this.currentScreenMain != 'screenCatalogMain') {
-        document.getElementById('btnMenu').style.display = ''
-        document.getElementById('btnMenuPopup').style.display = 'none'
-        document.getElementById('btnMenuPopupClose').style.display = 'none'
+      if (this.currentScreenMain != "screenCatalogMain") {
+        document.getElementById("btnMenu").style.display = "";
+        document.getElementById("btnMenuPopup").style.display = "none";
+        document.getElementById("btnMenuPopupClose").style.display = "none";
       } else {
-        document.getElementById('btnMenu').style.display = 'none'
-        document.getElementById('btnMenuPopup').style.display = ''
-        document.getElementById('btnMenuPopupClose').style.display = ''
-
+        document.getElementById("btnMenu").style.display = "none";
+        document.getElementById("btnMenuPopup").style.display = "";
+        document.getElementById("btnMenuPopupClose").style.display = "";
       }
-    }
+    },
   },
 });

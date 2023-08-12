@@ -180,6 +180,7 @@
                     class="btn-reset btn--accordion main-body__accordion accordion-header">
 
                     <span :triagleTab="item.id" class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+                    <span class="product__title">{* getCategoryNameBySubCategory(item.id) *}</span>
 
                     {* item.name *}</button>
                   <div class="main-body__panel" :tab="item.id" style="display:none;">
