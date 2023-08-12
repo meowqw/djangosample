@@ -52,6 +52,7 @@ new Vue({
 
     // хранит id подкатегорий в которых если выюранные товары
     selectedSubcategory: [],
+    // не задействован
     selectedProduct: [],
   },
   methods: {
@@ -98,6 +99,7 @@ new Vue({
       this.pointControlItemProducts();
     },
 
+    // сохранение данных в сторейдж
     saveToStorage() {
       localStorage.setItem("catalog", JSON.stringify(this.catalog));
       localStorage.setItem("products", JSON.stringify(this.products));
@@ -136,6 +138,7 @@ new Vue({
       );
     },
 
+    // заггрузка данных из сторейджа 
     loadStorage() {
       let items = [
         "catalog",
@@ -1566,6 +1569,7 @@ new Vue({
       this.menuPopupIsOpen = false;
     },
 
+    // подгрузка данных 
     loadData() {
       for (let i in this.categoryStructure) {
         this.categoryStructure[i] = [...new Set(this.categoryStructure[i])];
@@ -1577,7 +1581,8 @@ new Vue({
       }
       this.pointControlItemProducts();
     },
-
+    
+    // название категории по под каегории
     getCategoryNameBySubCategory(id) {
       for (let i in this.mainCategory) {
         let mainPoductList = this.mainCategory[i].id_main_product;
