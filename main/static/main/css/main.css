@@ -416,7 +416,7 @@ a {
   border-radius: 12px;
   padding: 13px 12px 13px 24px;
   width: 100%;
-  height: 45px;
+  height: 35px;
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
@@ -428,8 +428,8 @@ a {
   justify-content: center;
   border: 1px solid #bababa;
   padding: 2px;
-  width: 248px;
-  height: 45px;
+  width: 220px;
+  height: 35px;
 }
 .sidebar__btn--active::before {
   content: url(../img/arrow-right.svg);
@@ -1372,7 +1372,7 @@ a {
   border: 1px solid #bababa;
   border-radius: 12px;
   padding: 6px 30px 6px 11px;
-  min-height: 45px;
+  min-height: 35px;
 }
 .product--none {
   position: relative;
@@ -2448,7 +2448,7 @@ a {
   border: 1px solid #bababa;
   border-radius: 12px;
   width: 100%;
-  height: 45px;
+  height: 35px;
 }
 .btn--product {
   border-radius: 8px;
@@ -2673,42 +2673,42 @@ a {
 .accordion-item--green .ui-accordion-header-active {
   border: 1px solid #8ab964;
   background-color: #f5fdee;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--orange .ui-accordion-header-active {
   border: 1px solid var(--orange);
   background-color: #ffece4;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--yellow .ui-accordion-header-active {
   border: 1px solid var(--yellow);
   background-color: #fff6e3;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--light-pink .ui-accordion-header-active {
   border: 1px solid var(--light-pink);
   background-color: #ffeaf0;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--blue .ui-accordion-header-active {
   border: 1px solid var(--blue);
   background-color: #eefcfe;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--purple .ui-accordion-header-active {
   border: 1px solid var(--purple);
   background-color: #f8eeff;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--red .ui-accordion-header-active {
   border: 1px solid var(--red);
   background-color: #ffe9e9;
-  height: 45px;
+  height: 35px;
 }
 .accordion-item--pink .ui-accordion-header-active {
   border: 1px solid var(--pink);
   background-color: #ffdef2;
-  height: 45px;
+  height: 35px;
 }
 .custom-select {
   position: relative;

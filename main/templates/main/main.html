@@ -164,6 +164,7 @@
           </section>
           <section class="main-content">
             <h2 class="visually-hidden title">Каталог</h2>
+
             <div class="main-content__head main-head">
               <ul class="list-reset main-head__list">
                 <li class="main-head__item">Наименование</li>
@@ -175,12 +176,13 @@
             </div>
             <div class="main-content__body main-body">
               <ul class="list-reset main-body__list accordion" v-for="item in catalog" style="margin-bottom: 7px;">
+                  <h4 style="margin-bottom: 5px">{* getCategoryNameBySubCategory(item.id) *}</h4>
                 <li :class="'main-body__item accordion-item accordion-item--'+item.color">
                   <button :tabBtn="item.id" v-on:click="openTab(item.id)"
                     class="btn-reset btn--accordion main-body__accordion accordion-header">
 
                     <span :triagleTab="item.id" class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
-                    <span class="product__title">{* getCategoryNameBySubCategory(item.id) *}</span>
+                    <span class="product__title"></span>
 
                     {* item.name *}</button>
                   <div class="main-body__panel" :tab="item.id" style="display:none;">

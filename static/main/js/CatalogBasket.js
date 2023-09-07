@@ -54,6 +54,9 @@ new Vue({
         selectedSubcategory: [],
         // не задействован
         selectedProduct: [],
+
+        // отрисованные заголовки
+        renderedTitles: [],
     },
     methods: {
         // get request
@@ -1595,10 +1598,16 @@ new Vue({
                 let mainPoductList = this.mainCategory[i].id_main_product;
                 for (let y in mainPoductList) {
                     if (mainPoductList[y].id == id) {
-                        return this.mainCategory[i].name;
+                        if (this.renderedTitles.includes(this.mainCategory[i].id)) {
+                            return this.mainCategory[i].name;
+                        } else {
+                            this.renderedTitles.push(this.mainCategory[i].id)
+                            return this.mainCategory[i].name;
+                        }
                     }
                 }
             }
+
         },
         /* ------------------- */
     },

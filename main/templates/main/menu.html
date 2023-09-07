@@ -16,7 +16,10 @@
 
           <li class="sidebar__subitem">
 
-            <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" color="{{category.color}}" type="mainProduct"
+          <button color="{{category.color}}" style="width: 10px; float: left; margin-right: 5px" class="btn-reset sidebar__btn">А
+            </button>
+
+            <button style="float: right" v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" color="{{category.color}}" type="mainProduct"
               id="{{main_product.id}}" class="btn-reset sidebar__btn sidebar__btn--sub">{{main_product.name}}
             </button>
           </li>

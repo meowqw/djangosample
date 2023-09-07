@@ -428,7 +428,7 @@ a {
   justify-content: center;
   border: 1px solid #bababa;
   padding: 2px;
-  width: 248px;
+  width: 220px;
   height: 45px;
 }
 .sidebar__btn--active::before {
