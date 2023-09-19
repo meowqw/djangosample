@@ -57,6 +57,9 @@ new Vue({
 
         // отрисованные заголовки
         renderedTitles: [],
+
+        categoriesFilter: [],
+        mainCategoriesFilter: [],
     },
     methods: {
         // get request
@@ -1546,12 +1549,25 @@ new Vue({
 
                     await this.lightButton(category);
                 }
+
+                let ids = document.querySelectorAll(`[categoryidfilter="${category}"]`);
+                for (let i in ids) {
+                    this.mainCategoriesFilter.push(ids[i].id)
+                }
+
                 this.openedMainCategory.push(category);
             } else {
                 // console.log(1)
                 this.openedMainCategory = this.openedMainCategory.filter(function (f) {
                     return f !== category;
                 });
+
+                let ids = document.querySelectorAll(`[categoryidfilter="${category}"]`);
+                for (let i in ids) {
+                    this.mainCategoriesFilter = this.mainCategoriesFilter.filter(function (f) {
+                        return f !== ids[i].id;
+                    });
+                }
 
                 if (category in this.categoryStructure) {
                     if (this.categoryStructure[category].length) {
@@ -1569,7 +1585,19 @@ new Vue({
                 }
             }
 
+            this.arrRes = [];
+            for (let i in this.mainCategoriesFilter) {
+                if (this.mainCategoriesFilter[i] != undefined) {
+                    this.arrRes.push(this.mainCategoriesFilter[i])
+                }
+            }
+
+            this.mainCategoriesFilter = this.arrRes;
+
+
             console.log(this.openedMainCategory);
+            console.log(this.mainCategoriesFilter);
+
         },
         openPopupHead: function () {
             this.menuPopupIsOpen = true;

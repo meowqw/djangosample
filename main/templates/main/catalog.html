@@ -18,7 +18,7 @@
                         class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
 
-                        <span id="{{main_product.id}}" element="close" style="display: none">
+                        <span id="{{main_product.id}}"  element="close" style="display: none">
                             <svg class="menu__link-icon">
                                 <use xlink:href="/static/main/img/sprite.svg#close"></use>
                             </svg>
@@ -106,7 +106,7 @@
                     <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})"
                         class="btn-reset menu__link" color="{{category.color}}" type="mainProductCatalog"
                         id="{{main_product.id}}">{{main_product.name}}
-                        
+
                         <span id="{{main_product.id}}" element="close" style="display: none">
                             <svg class="menu__link-icon">
                                 <use xlink:href="/static/main/img/sprite.svg#close"></use>
@@ -222,14 +222,14 @@
                 <ul class="list-reset product__right-list">
                   <li class="product__right-item" v-if="product.stock.total != 0">
                     <div class="product__presence product__presence--ordering product__presence--not-arrow">{* product.stock.name *}</div>
-                    
+
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.stock.total *} ₽</div>
                   </li>
 
                   <li class="product__right-item" v-if="product.way.total != 0">
                     <div class="product__presence product__presence--blue product__presence--not-arrow">{* product.way.name *}</div>
-                    
+
                     <div class="product__size">{* product.price *} ₽</div>
                     <div class="product__size-all product__size-all--ordering">{* product.way.total *} ₽</div>
                   </li>

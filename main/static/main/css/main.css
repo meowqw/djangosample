@@ -417,8 +417,8 @@ a {
   padding: 13px 12px 13px 24px;
   width: 100%;
   height: 35px;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 650;
+  font-size: 14px;
   line-height: 19px;
   background-color: var(--light-color);
 }
@@ -428,7 +428,7 @@ a {
   justify-content: center;
   border: 1px solid #bababa;
   padding: 2px;
-  width: 220px;
+  width: 270px;
   height: 35px;
 }
 .sidebar__btn--active::before {

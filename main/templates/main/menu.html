@@ -5,10 +5,12 @@
 
     {% for category in categories %}
     <li class="sidebar__item accordion-item accordion-item--{{category.color}}" v-on:click="addCategoryToOpenedCategory({{category.id}})">
-      <button category="{{category.id}}" color="{{category.color}}" v-on:click="addProductFromMainCategory({{category.id}})"
-        class="btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--{{category.color}}">{{category.name}}</button>
-        
-        
+      <button category="{{category.id}}" color="{{category.color}}"  v-on:click="addProductFromMainCategory({{category.id}})"
+        class="btn-reset sidebar__btn sidebar__accordion accordion-header accordion-header--{{category.color}}">{{category.name}}
+          <span v-on:click="addCategoryToFilter({{ category.id }})"></span>
+      </button>
+
+
 
       <div class="sidebar__panel" mainProductPanel="{{category.id}}">
         <ul class="list-reset sidebar__sublist">
@@ -16,11 +18,8 @@
 
           <li class="sidebar__subitem">
 
-          <button color="{{category.color}}" style="width: 10px; float: left; margin-right: 5px" class="btn-reset sidebar__btn">А
-            </button>
-
-            <button style="float: right" v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" color="{{category.color}}" type="mainProduct"
-              id="{{main_product.id}}" class="btn-reset sidebar__btn sidebar__btn--sub">{{main_product.name}}
+            <button v-on:click="addProductInCatalog({{main_product.id}}, {{category.id}})" color="{{category.color}}" type="mainProduct"
+              id="{{main_product.id}}" categoryIdFilter="{{ category.id }}" class="btn-reset sidebar__btn sidebar__btn--sub">{{main_product.name}}
             </button>
           </li>
 
